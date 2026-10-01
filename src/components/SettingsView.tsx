@@ -24,8 +24,6 @@ import type { ClaimPassport, Product } from '../types';
 interface SettingsViewProps {
   claims: ClaimPassport[];
   product: Product;
-  theme: 'dark' | 'light';
-  onToggleTheme: () => void;
   workspaceName: string;
   onUpdateWorkspaceName?: (name: string) => void;
   onResetWorkspace: () => void;
@@ -34,8 +32,6 @@ interface SettingsViewProps {
 export const SettingsView: React.FC<SettingsViewProps> = ({
   claims,
   product,
-  theme,
-  onToggleTheme,
   workspaceName,
   onUpdateWorkspaceName,
   onResetWorkspace
@@ -417,21 +413,16 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
               <div>
                 <div style={{ fontWeight: 600, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  {theme === 'dark' ? <Moon size={15} color="#4361EE" /> : <Sun size={15} color="#FFD166" />}
+                  <Moon size={15} color="#3D5AFE" />
                   <span>Color Theme</span>
                 </div>
                 <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary, #94A3B8)', marginTop: '3px' }}>
-                  Currently running in {theme === 'dark' ? 'Cyber Dark Mode' : 'Clean Light Mode'}
+                  AD-EVIDENCE Cyber Dark Obsidian Engine (Default)
                 </div>
               </div>
-              <button 
-                className="btn btn-secondary btn-sm"
-                onClick={onToggleTheme}
-                style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem' }}
-              >
-                {theme === 'dark' ? <Sun size={14} color="#FFD166" /> : <Moon size={14} color="#4361EE" />}
-                <span>Switch to {theme === 'dark' ? 'Light' : 'Dark'}</span>
-              </button>
+              <span style={{ fontSize: '0.75rem', padding: '3px 8px', borderRadius: '4px', background: 'rgba(61, 90, 254, 0.15)', color: '#3D5AFE', fontWeight: 600 }}>
+                CYBER DARK ACTIVE
+              </span>
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>

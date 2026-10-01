@@ -32,6 +32,7 @@
                  radial-gradient(circle at 50% 100%, rgba(0, 229, 255, 0.08) 0%, transparent 50%),
                  #070913;
   --bg-sidebar: #060810;
+  --bg-sidebar-gradient: linear-gradient(180deg, rgba(12, 17, 36, 0.95) 0%, rgba(7, 9, 20, 0.98) 100%);
   --bg-header: rgba(7, 9, 19, 0.94);
   --bg-surface: rgba(12, 17, 34, 0.88);
   --bg-surface-secondary: rgba(16, 23, 45, 0.82);
@@ -94,6 +95,75 @@
   --radius-full: 9999px;
 
   --sidebar-width: 260px;
+}
+
+/* ==================================================
+   LIGHT THEME DESIGN TOKENS
+   Clean, modern high-contrast editorial appearance
+   ================================================== */
+[data-theme='light'] {
+  --c-void: #F8FAFC;
+  --c-cobalt: #2563EB;
+  --c-cyan: #0284C7;
+  --c-magenta: #DB2777;
+  --c-amber: #D97706;
+  --c-fog: #64748B;
+  --c-pearl: #0F172A;
+
+  --bg-app: #F8FAFC;
+  --bg-gradient: radial-gradient(ellipse at 50% -10%, rgba(37, 99, 235, 0.08) 0%, transparent 60%),
+                 radial-gradient(circle at 92% 18%, rgba(219, 39, 119, 0.05) 0%, transparent 40%),
+                 #F8FAFC;
+  --bg-sidebar: #FFFFFF;
+  --bg-sidebar-gradient: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
+  --bg-header: rgba(255, 255, 255, 0.95);
+  --bg-surface: #FFFFFF;
+  --bg-surface-secondary: #F1F5F9;
+  --bg-surface-subtle: #E2E8F0;
+  --bg-surface-hover: #E2E8F0;
+  --bg-card: #FFFFFF;
+  --bg-card-elevated: #FFFFFF;
+
+  --border-light: rgba(37, 99, 235, 0.12);
+  --border-subtle: #E2E8F0;
+  --border-medium: #CBD5E1;
+  --border-strong: #2563EB;
+  --border-accent: #0284C7;
+  --border-magenta: rgba(219, 39, 119, 0.35);
+  --border-amber: rgba(217, 119, 6, 0.35);
+
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #64748B;
+  --text-subtle: #94A3B8;
+  --text-inverse: #FFFFFF;
+
+  /* Semantic Status Light */
+  --status-supported-bg: rgba(2, 132, 199, 0.1);
+  --status-supported-border: rgba(2, 132, 199, 0.35);
+  --status-supported-text: #0284C7;
+  --status-supported-icon: #0284C7;
+
+  --status-review-bg: rgba(217, 119, 6, 0.1);
+  --status-review-border: rgba(217, 119, 6, 0.35);
+  --status-review-text: #B45309;
+  --status-review-icon: #B45309;
+
+  --status-conflict-bg: rgba(219, 39, 119, 0.1);
+  --status-conflict-border: rgba(219, 39, 119, 0.35);
+  --status-conflict-text: #BE185D;
+  --status-conflict-icon: #BE185D;
+
+  --status-neutral-bg: rgba(100, 116, 139, 0.1);
+  --status-neutral-border: rgba(100, 116, 139, 0.25);
+  --status-neutral-text: #475569;
+  --status-neutral-icon: #475569;
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08);
 }
 
 * {

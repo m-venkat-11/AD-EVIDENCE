@@ -21,8 +21,8 @@ import type { ClaimPassport, TimelineEvent } from '../types';
 interface OverviewDashboardProps {
   claims: ClaimPassport[];
   timelineEvents: TimelineEvent[];
-  onVerifyNew: () => void;
-  onExploreGraph: () => void;
+  onVerifyNew?: () => void;
+  onExploreGraph?: () => void;
   onSelectClaim: (claimId: string) => void;
 }
 
@@ -65,16 +65,11 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
           </p>
         </div>
 
-        <div className="overview-header-actions">
-          <button className="btn btn-secondary" onClick={onExploreGraph}>
-            <Share2 size={16} />
-            <span>Explore Claim Graph</span>
-          </button>
-
-          <button className="btn btn-primary" onClick={onVerifyNew}>
-            <Plus size={16} />
-            <span>Verify New Content</span>
-          </button>
+        <div className="overview-header-status">
+          <div className="dashboard-status-chip">
+            <span className="pulse-indicator-dot"></span>
+            <span>Continuous Evidence Monitoring</span>
+          </div>
         </div>
       </div>
 

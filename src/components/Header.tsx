@@ -5,9 +5,6 @@ import {
   Building2, 
   CheckCircle2, 
   AlertTriangle, 
-  Sun, 
-  Moon, 
-  PlusCircle, 
   X 
 } from 'lucide-react';
 import type { SystemNotification } from '../types';
@@ -17,20 +14,14 @@ interface HeaderProps {
   notifications: SystemNotification[];
   onSelectClaim: (claimId: string) => void;
   onOpenHelp: () => void;
-  theme?: 'dark' | 'light';
-  onToggleTheme?: () => void;
   workspaceName?: string;
-  onNewVerification?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   onOpenSearch,
   notifications,
   onSelectClaim,
-  theme = 'dark',
-  onToggleTheme,
-  workspaceName = 'Global Brand Assurance',
-  onNewVerification
+  workspaceName = 'Global Brand Assurance'
 }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const unreadCount = notifications.filter(n => !n.read).length;
@@ -41,9 +32,8 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="header-left">
         <div 
           className="workspace-badge-box" 
-          onClick={onNewVerification}
-          title="Active Verification Workspace — Click to verify an ad"
-          style={{ cursor: onNewVerification ? 'pointer' : 'default', display: 'flex', alignItems: 'center', gap: '10px' }}
+          title="Active Verification Workspace"
+          style={{ display: 'flex', alignItems: 'center', gap: '10px' }}
         >
           <div className="workspace-icon" style={{ background: 'rgba(0, 229, 255, 0.1)', padding: '6px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Building2 size={16} color="var(--brand-cyan, #00E5FF)" />
@@ -142,34 +132,6 @@ export const Header: React.FC<HeaderProps> = ({
           )}
         </div>
 
-        {/* Functional Theme Toggle Button */}
-        {onToggleTheme && (
-          <button 
-            className="header-icon-btn" 
-            onClick={onToggleTheme}
-            title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          >
-            {theme === 'dark' ? (
-              <Sun size={18} color="#FFD166" />
-            ) : (
-              <Moon size={18} color="#4361EE" />
-            )}
-          </button>
-        )}
-
-        {/* Primary Action Button: + Verify Ad */}
-        {onNewVerification && (
-          <button 
-            className="btn btn-primary btn-sm"
-            onClick={onNewVerification}
-            title="Start New Ad Verification"
-            style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600, padding: '6px 14px' }}
-          >
-            <PlusCircle size={15} />
-            <span>Verify Ad</span>
-          </button>
-        )}
       </div>
     </header>
   );

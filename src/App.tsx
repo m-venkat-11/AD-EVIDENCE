@@ -40,11 +40,13 @@ import type {
 import './App.css';
 
 export function App() {
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
-
+  // Theme is strictly dark (the signature high-tech obsidian aesthetic of AD-EVIDENCE)
   React.useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
+    document.documentElement.setAttribute('data-theme', 'dark');
+    try {
+      localStorage.setItem('ad_evidence_theme', 'dark');
+    } catch {}
+  }, []);
 
   // App Navigation & Mode
   const [appMode, setAppMode] = useState<'enterprise' | 'consumer' | 'landing'>('enterprise');
@@ -345,10 +347,7 @@ export function App() {
           notifications={notifications}
           onSelectClaim={handleSelectClaim}
           onOpenHelp={() => setCurrentNav('help')}
-          theme={theme}
-          onToggleTheme={() => setTheme(prev => prev === 'dark' ? 'light' : 'dark')}
           workspaceName={activeProduct?.productName && activeProduct.productName !== 'No Advertisement Verified' ? `${activeProduct.brandName} Verification Workspace` : 'Global Brand Assurance'}
-          onNewVerification={() => setCurrentNav('verify')}
         />
 
         {/* Dynamic Route Content */}
@@ -357,8 +356,6 @@ export function App() {
             <OverviewDashboard 
               claims={claims}
               timelineEvents={timelineEvents}
-              onVerifyNew={() => setCurrentNav('verify')}
-              onExploreGraph={() => setCurrentNav('graph')}
               onSelectClaim={handleSelectClaim}
             />
           )}
@@ -369,7 +366,6 @@ export function App() {
               product={activeProduct}
               onRefreshFreshness={handleRefreshFreshness}
               onUpdateBrandResponse={handleUpdateBrandResponse}
-              onExploreInGraph={() => setCurrentNav('graph')}
             />
           )}
 
@@ -481,7 +477,6 @@ export function App() {
               product={activeProduct}
               onRefreshFreshness={handleRefreshFreshness}
               onUpdateBrandResponse={handleUpdateBrandResponse}
-              onExploreInGraph={() => setCurrentNav('graph')}
             />
           )}
 
@@ -517,8 +512,6 @@ export function App() {
             <SettingsView 
               claims={claims}
               product={activeProduct}
-              theme={theme}
-              onToggleTheme={() => setTheme(prev => prev === 'dark' ? 'light' : 'dark')}
               workspaceName={activeProduct?.productName && activeProduct.productName !== 'No Advertisement Verified' ? `${activeProduct.brandName} Verification Workspace` : 'Global Brand Assurance'}
               onResetWorkspace={handleResetWorkspace}
             />

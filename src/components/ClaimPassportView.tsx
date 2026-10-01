@@ -31,7 +31,7 @@ interface ClaimPassportViewProps {
   product: Product;
   onRefreshFreshness: (claimId: string) => void;
   onUpdateBrandResponse: (claimId: string, response: string) => void;
-  onExploreInGraph: (claimId: string) => void;
+  onExploreInGraph?: (claimId: string) => void;
 }
 
 export const ClaimPassportView: React.FC<ClaimPassportViewProps> = ({
@@ -105,14 +105,6 @@ export const ClaimPassportView: React.FC<ClaimPassportViewProps> = ({
             >
               <RefreshCw size={14} className={isRefreshing ? 'spin' : ''} />
               <span>{isRefreshing ? 'Re-checking...' : 'Re-check Freshness'}</span>
-            </button>
-
-            <button 
-              className="btn btn-secondary btn-sm"
-              onClick={() => onExploreInGraph(claim.id)}
-            >
-              <Share2 size={14} />
-              <span>View in Graph</span>
             </button>
           </div>
         </div>
