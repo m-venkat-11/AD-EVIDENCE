@@ -1,0 +1,1057 @@
+TOTAL PAGES: 19
+
+=== PAGE 1 ===
+AD-EVIDENCE - The Evidence Layer for AI-Era Advertising | Samartha Stage 0
+Page 1
+ SAMARTHA HACKATHON - STAGE 0
+ AD-EVIDENCE
+ The Evidence Layer for AI-Era Advertising
+ Working product concept: a two-sided verification system that connects advertisements,
+ product claims, authoritative evidence, independent evidence, retailer observations,
+ consumer reports and media provenance into an explainable claim graph.
+BRAND SIDE
+pre-publish review
+CONSUMER SIDE
+ pre-purchase verify
+PUBLIC EVIDENCE
+ product record
+CONTENT + CLAIM
+ extract atomic claims
+EVIDENCE GRAPH
+sources + relationships
+VERIFICATION
+rules + AI + provenance
+EXPLAINABLE REPORT
+ claim-by-claim evidence
+AD-EVIDENCE: two-sided trust layer
+Tagline: See the claim. See the evidence.
+Document purpose: This document is the complete concept and system-design reference for turning the
+AD-EVIDENCE idea into a real website/product. It deliberately goes beyond a chatbot, a simple AI detector,
+or a conventional fact-checking site.
+Research freshness note: Statistical figures in this document are the latest relevant published figures
+located for this research as of September 2026. They are not live telemetry. Each figure is identified with
+its date, geography, sample and source so it is not mistaken for a universal real-time percentage.
+
+
+=== PAGE 2 ===
+AD-EVIDENCE - The Evidence Layer for AI-Era Advertising | Samartha Stage 0
+Page 2
+Table of Contents
+1. Executive summary and problem statement
+2. Why the problem matters now: industry evidence
+3. Product vision and unique positioning
+4. Users and the two-sided product model
+5. The claim graph: the core of the system
+6. Intelligent verification system design
+7. Evidence model and source hierarchy
+8. AI architecture and model responsibilities
+9. Deterministic verification engine
+10. Verification status model and explainability
+11. Data sources and acquisition strategy
+12. Product and website features
+13. Detailed user flows
+14. Technology stack and infrastructure
+15. Data model and storage architecture
+16. API and service architecture
+17. Security, privacy and evidence poisoning defenses
+18. Differentiation from GPT/Gemini and existing products
+19. Competitor landscape and realistic gap
+20. Evaluation and quality metrics
+21. Intelligent learning / continuous improvement loop
+22. Roadmap from concept to production
+23. Stage 0 submission-ready problem statement
+24. Risks, boundaries and non-goals
+25. Research and technical sources
+
+
+=== PAGE 3 ===
+AD-EVIDENCE - The Evidence Layer for AI-Era Advertising | Samartha Stage 0
+Page 3
+1. Executive Summary and Problem Statement
+The problem. Generative AI is changing how marketing content is produced. Advertisers can create large
+volumes of copy, images, video and variants quickly, but the ability to generate persuasive content does
+not automatically guarantee that the content is accurate, supported by evidence, consistent with the
+brand, or transparently labeled. IAB research reported that 70% of surveyed U.S. advertising executives
+had experienced at least one AI-related advertising incident, including hallucinations, bias or off-brand
+content; 40% said they had to pause or pull ads, over a third reported brand damage or PR issues, and
+nearly 30% had to conduct internal audits. [R1]
+Consumer-side problem. The same content can reach consumers who have little practical way to inspect
+the evidence behind a claim. At the same time, AI is becoming a shopping input: BCG reported a 35%
+increase in shopping-related GenAI use between February and November 2025 and found more than 60%
+of surveyed consumers expressed high trust in GenAI results. [R4] This creates a new trust surface between
+advertising, AI-assisted discovery and purchasing.
+Proposed solution. AD-EVIDENCE is not an AI judge that emits a single trust score. It is a specialized
+verification layer. The system extracts atomic claims from marketing content, identifies the product,
+retrieves evidence from multiple source types, preserves source metadata and time, detects support or
+conflicts, checks media provenance and applicable disclosure logic, and produces an explainable
+claim-by-claim report.
+Two-sided model. On the brand side, the system can be used before publication to catch unsupported or
+conflicting claims. On the consumer side, the same evidence layer can be used to verify an advertisement
+before purchase. A public product evidence page can expose the subset of evidence that is safe to share.
+Core thesis: the product is not the LLM. The product is the persistent claim-and-evidence network that can
+use GPT/Gemini or any other model underneath it.
+2. Why the Problem Matters Now - Industry
+Evidence
+The following figures are included because the project needs an evidence-based reason to exist. They are
+published research figures, not real-time telemetry. The population and geography matter.
+ 70%
+of surveyed U.S. ad executives reported at least one AI-related
+ advertising incident.
+IAB, Aug. 21, 2025; survey of 125 U.S. ad executives; survey fielded July
+ 2024. [R1]
+ 40%
+ of the same respondents said they had to pause or pull ads
+ after AI-related issues.
+IAB, Aug. 21, 2025; same survey. [R1]
+ 83%
+of surveyed ad executives said their company had deployed AI
+ in the creative process.
+IAB, Jan. 15, 2026; 104 U.S. ad-industry executives. [R2]
+ 71%
+ of surveyed Gen Z/Millennial consumers believed they had
+ seen an ad created using AI.
+IAB, Jan. 15, 2026; 505 U.S. Gen Z/Millennial consumers. [R2]
+ 73%
+ said knowing an ad was created with AI would increase or not
+ change purchase likelihood.
+IAB, Jan. 15, 2026; Gen Z/Millennial respondents. [R2]
+ 67%
+ of Indians surveyed expected products/services using AI to
+ disclose that use.
+Ipsos AI Monitor 2025; 23,000 people across 30 countries, including India.
+ [R6]
+
+
+=== PAGE 4 ===
+AD-EVIDENCE - The Evidence Layer for AI-Era Advertising | Samartha Stage 0
+Page 4
+ 35%
+ growth in shopping-related GenAI use from Feb. to Nov. 2025
+ reported by BCG.
+BCG, Jan. 2, 2026; survey/research on shopping-related GenAI use. [R4]
+ >60%
+of surveyed consumers in BCG research expressed high trust in
+ GenAI results.
+BCG, Jan. 2, 2026; surveyed consumers. [R4]
+What these statistics actually tell us. The 70% incident figure does not mean 70% of all advertisements
+are bad. It means 70% of the surveyed organizations reported at least one AI-related advertising incident.
+The 71% figure measures consumer belief that they had seen an AI-created ad; it is not a census of all
+consumers. The 67% India figure comes from a 30-country survey and expresses an expectation about
+disclosure, not a legal requirement by itself. These distinctions should remain visible in the product and in
+the pitch.
+Regulatory/standards momentum. IAB published AI Transparency & Disclosure Framework V2 in August
+2026, using a risk-based, materiality-driven approach for AI-generated and AI-assisted text, imagery, video,
+audio, synthetic voices, digital twins and AI-powered consumer interactions. [R3] Google published a July
+2026 update describing AI-labeling capabilities and noting that specific AI advertising requirements affect
+jurisdictions including India; Google also states that using its labeling setting does not itself guarantee
+regulatory compliance. [R5]
+
+
+=== PAGE 5 ===
+AD-EVIDENCE - The Evidence Layer for AI-Era Advertising | Samartha Stage 0
+Page 5
+3. Product Vision and Unique Positioning
+Project title: AD-EVIDENCE
+Subtitle: The Evidence Layer for AI-Era Advertising
+Tagline: See the claim. See the evidence.
+AD-EVIDENCE should be understood as a specialized trust infrastructure layer for commercial claims. It sits
+between content generation/publication and human decision-making. It is not intended to decide whether a
+consumer should buy a product, and it is not intended to replace legal/compliance teams. Its job is to make
+the evidence behind marketing claims visible, traceable, comparable and time-aware.
+The core design principle is simple: the system is claim-centric, not ad-centric. An advertisement is a
+container of claims. A claim can appear in multiple advertisements, retailer pages, product sheets, reviews
+and consumer reports. Once that claim becomes a persistent object, the system can connect and compare
+all of those appearances.
+CLAIM
+50-hour battery
+ADVERTISEMENT
+ asserts
+BRAND SOURCE
+ 40h official
+RETAILER
+ 50h listed
+INDEPENDENT
+ 38.4h test
+CONSUMER
+27-42h observed
+AI ASSET
+synthetic visual
+PRODUCT
+XYZ headset
+Evidence-centered claim graph
+The long-term vision is an advertising evidence network where a product has a living evidence record,
+advertisements reference claims, brands maintain authoritative records, independent sources can
+corroborate or challenge claims, retailers provide market observations, and consumers contribute
+structured real-world observations.
+Unique positioning hypothesis: Existing enterprise platforms already provide pieces of brand governance
+and marketing compliance. Adobe GenStudio applies brand rules and validation; Persado offers
+compliance analysis, risk profiles and audit trails. [R8][R9] AD-EVIDENCE should therefore differentiate
+itself by centering on a shared claim graph that serves both the brand and the consumer, with evidence
+lineage and cross-source conflict visibility as first-class objects. This is a positioning hypothesis, not a
+claim that no competitor has adjacent features.
+
+
+=== PAGE 6 ===
+AD-EVIDENCE - The Evidence Layer for AI-Era Advertising | Samartha Stage 0
+Page 6
+4. Users and the Two-Sided Product Model
+BRAND CONSOLE
+products / claims / campaigns / reviews
+CONSUMER VERIFY
+upload / share / scan / compare
+PUBLIC PRODUCT
+claim record / evidence / history
+SHARED TRUST ENGINE
+identity + claim graph + evidence + verification + provenance + audit
+FUTURE DISTRIBUTION
+browser extension - mobile share sheet - commerce integrations - API
+One trust engine, multiple surfaces
+Marketing / brand team. Typical questions: "Can we publish this?", "Which claims need support?", "Did the
+generated copy strengthen a product claim?", "Does this creative violate our tone?", "What evidence will
+we need if challenged?"
+Consumer. Typical questions: "Does this advertisement match official product information?", "What exactly
+is this ad claiming?", "Is the price current?", "Is this product image representative?", "What evidence
+supports the claim?", "Was AI used in a material part of the creative?"
+Independent reviewer / analyst. A third persona can inspect conflicts and evidence trails without being a
+marketer or consumer. This is useful for internal QA, journalists, researchers or marketplace trust teams.
+Important product boundary: the consumer report should explain evidence and uncertainty, not issue a
+blanket "buy / do not buy" decision. That keeps the product centered on evidence rather than becoming a
+recommendation engine.
+5. The Claim Graph - The Core of the System
+The claim graph is the persistent data structure that makes AD-EVIDENCE different from a chat session. It
+captures what is claimed, where it appeared, what evidence exists, who published that evidence, when it
+was observed, what conditions apply, and whether sources agree or conflict.
+Core nodes:
+• Brand
+• Product
+• Advertisement
+• Claim
+• Evidence
+• Source
+• Retailer
+• ConsumerReport
+• AIAsset
+• Document
+• VerificationEvent
+• Rule/Policy
+Core relationships:
+• Brand OWNS Product
+• Advertisement CONTAINS Claim
+• Claim APPLIES_TO Product
+
+
+=== PAGE 7 ===
+AD-EVIDENCE - The Evidence Layer for AI-Era Advertising | Samartha Stage 0
+Page 7
+• Evidence SUPPORTS Claim
+• Evidence CONTRADICTS Claim
+• Evidence FROM_SOURCE Source
+• Source PUBLISHED_BY Brand/Retailer/Lab
+• ConsumerReport OBSERVES Product
+• ConsumerReport RELATES_TO Claim
+• Advertisement CONTAINS_ASSET AIAsset
+• VerificationEvent VERIFIES Claim
+• Claim GOVERNED_BY Rule/Policy
+Recommended claim record:
+Claim ID | Product ID | normalized attribute | value | unit | wording | claim type | language | source
+advertisement | published/observed date | region | conditions | current status | evidence links | verification
+timestamp | freshness policy | reviewer state
+Why this matters: a product can have many advertisements. If every advertisement is analyzed as a new
+independent problem, the system repeats work. A persistent claim graph allows one verification event to
+inform many downstream reports, while still preserving the version and date of each occurrence.
+6. Intelligent Verification System Design
+The verification system should be a hybrid reasoning pipeline. Large language models are good at
+interpretation and ambiguity; deterministic software is better for exact numerical/date/unit logic;
+provenance systems are better for media history; the graph is better for relationship and lineage questions.
+The components should work together rather than allowing a single model to make the final call on
+everything.
+1
+INPUT
+ad / image / video / URL
+2
+NORMALIZE
+OCR + transcript + layout
+3
+IDENTIFY
+product / brand / GTIN
+4
+EXTRACT
+atomic claims
+5
+RETRIEVE
+evidence from sources
+6
+COMPARE
+semantic + numeric + contextual
+7
+PROVENANCE
+C2PA / supported AI signals
+8
+DECIDE
+supported / conflict / insufficient
+9
+EXPLAIN
+sources + reason + uncertainty
+10
+UPDATE
+graph + audit + recheck date
+Intelligent verification pipeline
+Detailed stages:
+1. Input intake - Accept text, screenshot, image, video, PDF, ad URL, product URL, barcode/GTIN or
+brand-uploaded document. Store the original asset and a hash for traceability.
+2. Content normalization - OCR visible text, extract PDF text/tables, transcribe video/audio, preserve
+layout/asset IDs, and create a normalized content representation.
+3. Product identity resolution - Resolve brand/product/model/variant and optionally GTIN. If identity is
+uncertain, stop short of definitive verification.
+
+
+=== PAGE 8 ===
+AD-EVIDENCE - The Evidence Layer for AI-Era Advertising | Samartha Stage 0
+Page 8
+4. Atomic claim extraction - Split the advertisement into small testable assertions: numeric specs,
+comparative claims, superlatives, price, warranty, performance, testimonial, visual representation and
+disclosure-related statements.
+5. Claim normalization - Map wording variants to common attributes and units. Example: "50 hrs", "50-hour
+battery", and "50 hours playtime" can map to battery_duration = 50h while retaining the original wording.
+6. Evidence retrieval - Retrieve relevant official, independent, retailer, regulatory and other sources. Search
+is used for discovery; the system stores source metadata and the exact evidence used.
+7. Evidence classification - Classify source type, directness, date, product scope, region and test conditions.
+This prevents a retailer listing from being treated exactly like a lab report.
+8. Claim-evidence comparison - Run numeric/unit/date comparisons, semantic comparison, context
+alignment, source conflict detection and condition checks.
+9. Media provenance analysis - Inspect C2PA Content Credentials when present and supported AI
+provenance/watermark signals. Absence of provenance is not treated as proof of fabrication.
+10. Verification state - Assign Supported, Contradicted, Insufficient Evidence, Context-Dependent, Outdated
+or Identity Unconfirmed.
+11. Explanation generation - Generate a human-readable report from structured findings and linked
+evidence, not from free-form model intuition.
+12. Audit + graph update - Store the verification event, evidence snapshot/version, model version, rule
+version, timestamps and reviewer action.
+13. Re-verification - Trigger re-checks when evidence becomes stale, product data changes, a brand
+updates claims, or a consumer/retailer conflict cluster grows.
+7. Evidence Model and Source Hierarchy
+The system must not use a simplistic rule like "official source always wins" or "majority wins." Different
+source types answer different questions. The verification engine should store source role and evidence
+scope.
+CLAIM
+atomic commercial assertion
+Official brand
+specs / manuals / claims
+Independent
+lab / certification / review
+Retailer
+price / availability / listing
+Consumer
+observations / conditions
+Regulatory / policy
+applicable rules / disclosure
+Provenance
+C2PA / supported signals
+Multi-source evidence model
+Source
+Best suited for
+Strength / caution
+Official manufacturer
+Product identity, specs, approved claims,
+manuals, warranty
+Primary source for what the manufacturer states;
+not independent confirmation.
+Independent lab /
+certification
+Measured performance,
+safety/certification
+Useful for corroboration; always preserve test
+method and date.
+Retailer
+Price, availability, listing metadata, seller
+claims
+Useful market observation; technical claims may
+copy or conflict with manufacturer data.
+
+
+=== PAGE 9 ===
+AD-EVIDENCE - The Evidence Layer for AI-Era Advertising | Samartha Stage 0
+Page 9
+Source
+Best suited for
+Strength / caution
+Consumer report
+Observed experience, recurring issues,
+real-world conditions
+Signal, not proof. Aggregate with conditions;
+never treat one report as definitive.
+Advertisement itself
+What the brand is asking consumers to
+believe
+Assertion under test, not independent evidence.
+Regulatory / policy
+source
+Disclosure and advertising requirements
+Jurisdiction- and time-specific; route
+consequential decisions to human review.
+Provenance metadata
+Origin/history of media assets
+C2PA or supported watermark/provenance signals
+can help; absence is not proof of fabrication.
+Recommended evidence precedence by claim type:
+ Claim type
+Preferred evidence approach
+Product specification
+Manufacturer technical document / official page first; independent measurement as
+corroboration; retailer values as market observations.
+Measured performance
+Independent test/lab evidence is especially important; manufacturer maximum claims
+may still be valid if test conditions differ.
+Price
+Current retailer/merchant/official store observation with timestamp and region; price is
+inherently time-sensitive.
+Certification
+Certification/standards source is preferred over copied retailer text.
+AI disclosure requirement
+Applicable policy/ruleset with jurisdiction and date; route legal conclusions to human
+review.
+Consumer experience
+Aggregated consumer observations with conditions; never infer universal truth from a
+small subset.
+Visual product
+representation
+Official product assets and identifiers, plus image comparison; provenance signals are
+supporting evidence.
+8. AI Architecture and Model Responsibilities
+The AI architecture should deliberately separate understanding tasks from decision rules. Gemini is a
+strong initial choice because the current Gemini API supports multimodal document understanding,
+structured outputs and Google Search grounding. [R10][R11][R12] The architecture should remain
+model-agnostic so a future implementation can swap or ensemble models.
+AI / ML UNDERSTANDING LAYER
+claim extraction - semantic normalization - evidence retrieval - ambiguous comparison - explanation
+DETERMINISTIC VERIFICATION LAYER
+numbers - units - dates - price deltas - source rules - temporal freshness - contradiction rules
+structured findings in / results out
+Use AI for ambiguity; use code for certainty
+Recommended AI workers / tool roles:
+Content Analyst - Extract text, entities, product names, claims, numbers, comparisons, testimonials and
+visible disclosure signals from text/image/video/PDF inputs.
+Product Identity Resolver - Map observed product names/model numbers/GTINs to a canonical product
+record. Use deterministic identifiers where available and AI for fuzzy matching.
+
+
+=== PAGE 10 ===
+AD-EVIDENCE - The Evidence Layer for AI-Era Advertising | Samartha Stage 0
+Page 10
+Evidence Researcher - Use Google Search grounding, URL context and approved source connectors to find
+candidate evidence, then return structured source records.
+Claim Analyst - Compare an atomic claim with retrieved evidence. Handle semantic equivalence,
+contradiction, scope and condition differences.
+Provenance Analyst - Inspect C2PA metadata and supported AI provenance signals; classify provenance as
+detected, absent, unknown or not available.
+Explanation Generator - Turn structured verification findings into plain-language evidence explanations. It
+must never invent citations not present in the structured result.
+Structured output requirement: use a strict schema for every AI stage. For example, claim extraction
+should return an array of claims with type, value, unit, scope and evidence anchors. Gemini supports JSON
+Schema-based structured outputs and can combine structured outputs with tools in supported current
+models. [R11]
+Search grounding: Gemini Google Search grounding can automatically search, process and cite web
+information. We should use that capability to discover evidence, then independently persist the evidence
+records and apply our own verification logic. [R10]
+9. Deterministic Verification Engine
+This is the layer that prevents the product from being a generic LLM wrapper. A deterministic engine should
+handle problems where the answer can be computed or ruled by an explicit rule.
+Rule class
+Example
+Numeric comparison
+50h advertised vs 40h official -> conflict candidate.
+Units
+2.5 kg vs 2500 g -> equivalent after normalization.
+Ranges
+"up to 50h" is not equivalent to "guaranteed 50h"; claim modality is preserved.
+Dates
+A price from three months ago should not be treated as current without a freshness
+check.
+Region
+₹ price in India is distinct from a U.S. price; region is part of the claim context.
+Variant
+Model A Pro is not automatically the same product as Model A.
+Comparatives
+"Best", "#1", "industry-leading" require defined comparison scope and supporting
+evidence.
+Conditional claims
+"Up to 10 hours with ANC off" should not be compared as if it were an unconditional
+10-hour claim.
+Duplicate claims
+Repeated claims across multiple ads should link to one normalized claim where
+product/scope/time match.
+Freshness
+Price/availability can expire quickly; certifications and specs have different review
+cadences.
+Do not use one giant "trust score". A single number compresses too much uncertainty. If the UI needs a
+summary, present counts and categories: 4 supported, 1 contradicted, 2 insufficient evidence, 1 outdated.
+The detail view should always show the evidence behind each item.
+
+
+=== PAGE 11 ===
+AD-EVIDENCE - The Evidence Layer for AI-Era Advertising | Samartha Stage 0
+Page 11
+10. Verification Status Model and Explainability
+ Status
+Meaning
+How system should explain it
+SUPPORTED
+Evidence adequately supports the claim for
+the stated scope/conditions.
+Show the source, date, conditions and exact
+evidence snippet.
+CONTRADICTED
+Available evidence conflicts with the
+advertised claim.
+Show both statements side by side and identify
+the conflict.
+INSUFFICIENT
+EVIDENCE
+No adequate evidence was found to verify or
+contradict the claim.
+Do not call it false; show what was searched and
+what is missing.
+CONTEXT-DEPENDE
+NT
+The claim can depend on conditions such as
+test setup, mode, region or time.
+Show the applicable conditions and avoid
+universal language.
+OUTDATED
+Evidence is older than the freshness policy for
+that claim type.
+Show the last verified date and ask for
+re-verification.
+IDENTITY
+UNCONFIRMED
+The system cannot confidently establish
+which product/ad the claim refers to.
+Ask for more identifying evidence rather than
+analyzing the wrong product.
+A result should always answer four questions: What did the advertisement claim? What evidence was
+checked? What did the evidence say? Why did the system choose this status?
+Example:
+Advertisement: "Guaranteed 40-hour battery life."
+Official source: "Up to 40 hours."
+Status: CONTRADICTED / STRENGTHENED CLAIM.
+Explanation: the advertisement changes an upper-bound specification into a guarantee. The system
+should show the original evidence and ask for human review.
+The product should also expose conditions. A battery test can differ based on volume, codec, ANC state,
+temperature or workload. A context-aware system should retain those conditions rather than flattening all
+results into one universal figure.
+11. Data Sources and Acquisition Strategy
+1. Brand-provided documents. PDFs, manuals, product spec sheets, approved claims, warranty documents,
+internal brand guidelines and approved media. Gemini can process PDFs using native vision and can
+extract structured information; the current API documentation says PDF files up to 50 MB or 1,000 pages
+are supported, with Files API recommended for repeated/larger interactions. [R12]
+2. Official websites. Use the manufacturer's official product pages as an important source for current public
+specifications, identity and approved product language. Store retrieval timestamp and content
+hash/snapshot for auditability.
+3. GS1 / product identity. Verified by GS1 contains company information and basic product information for
+more than 300 million products, including brand name, product description, category, product image URL,
+net content and links to other data sources. Access to some advanced services depends on GS1
+membership and member organization access, so production integration must be validated for the intended
+market. [R13]
+4. Retailer / merchant data. Use official APIs, merchant feeds or permitted pages for price, availability and
+seller claims. For example, Google Merchant API supports product, inventory, promotion and review-related
+merchant data; it is not a universal public retailer database, so access assumptions must be validated.
+5. Independent evidence. Use certification documents, lab measurements and high-quality testing sources
+when available. Preserve test conditions, date, model/variant and measurement method.
+6. Consumer reports. Let users submit structured observations with optional details such as purchase date,
+usage mode, region and test conditions. Store them as observations, not as verdicts. Aggregation can
+surface recurring signals without treating one complaint as proof.
+
+
+=== PAGE 12 ===
+AD-EVIDENCE - The Evidence Layer for AI-Era Advertising | Samartha Stage 0
+Page 12
+7. Regulatory / policy sources. Use authoritative government and platform policy sources for disclosure and
+advertising-rule context. India has the Department of Consumer Affairs Guidelines for Prevention of
+Misleading Advertisements and Endorsements for Misleading Advertisements, 2022. [R7] IAB's 2026
+disclosure framework can inform an industry ruleset, but the system should be jurisdiction-aware and route
+consequential legal conclusions to humans. [R3]
+8. Media provenance. C2PA Content Credentials provide technical standards for certifying the source and
+history/provenance of media content. Supported AI provenance signals such as SynthID can be additional
+evidence, but Google notes that AI detection/watermarking is not universally reliable. [R14][R15]
+12. Product and Website Features
+A. Consumer features
+• Verify an Ad: upload screenshot, image, video, PDF, text or URL.
+• Automatic claim extraction with highlighted claim spans.
+• Claim-by-claim evidence report with source links and timestamps.
+• Product identity resolution and optional barcode/GTIN scan.
+• Price freshness check and region-aware price observations.
+• Visual product-representation comparison against official assets.
+• AI-provenance panel: detected/unknown/available signals, without equating AI use with deception.
+• Compare multiple ads for the same product/category.
+• Consumer report submission with conditions and evidence attachments.
+• Public product evidence page showing shareable evidence only.
+B. Brand features
+• Brand Knowledge Base: products, specs, approved claims, prohibited claims, tone, visual rules and disclosure preferences.
+• Pre-publication advertisement verification.
+• Claim-to-source lineage and evidence snippets.
+• Campaign batch scanning for large numbers of creatives.
+• Risk prioritization and human-review queue.
+• Approval workflow and audit trail.
+• Version history for claims and brand rules.
+• Conflict alerts when retailer or consumer evidence differs from current approved data.
+• Re-verification scheduling by claim freshness.
+C. Platform / admin features
+• Source registry with source type and retrieval date.
+• Jurisdiction/ruleset registry.
+• Graph explorer for claim relationships.
+• Model/rule version tracking.
+• Evidence snapshot/hash storage.
+• Abuse reporting and evidence moderation.
+• Rate limits and upload safety controls.
+• Analytics for false-positive/false-negative review outcomes.
+13. Detailed User Flows
+Consumer flow:
+Ad appears -> user taps Share/Upload -> AD-EVIDENCE extracts claims -> product identity resolved -> sources
+retrieved -> graph query -> deterministic + AI checks -> evidence report -> user inspects source and uncertainty
+-> optional consumer report.
+Brand flow:
+Brand creates/obtains creative -> uploads campaign and product evidence -> system extracts claims -> claims
+linked to product -> evidence checks run -> risk items grouped -> marketer fixes content -> reviewer approves ->
+verification event recorded -> public-facing evidence record updated if appropriate.
+
+
+=== PAGE 13 ===
+AD-EVIDENCE - The Evidence Layer for AI-Era Advertising | Samartha Stage 0
+Page 13
+Public product flow:
+Product identity -> canonical product page -> claims -> evidence -> source dates -> claim history -> current
+conflicts -> consumer observations -> verification events.
+Critical failure flow:
+Identity uncertain -> do not continue to definitive claim verification -> request model number/GTIN/official
+product URL -> resume after identity confirmation.
+14. Technology Stack and Infrastructure
+Experience
+Next.js + TypeScript + Tailwind + shadcn/ui
+API / orchestration
+Next.js API + Python FastAPI workers + queue/cache
+AI
+Gemini multimodal + structured outputs + search grounding; optional second model
+Verification
+Rules engine + normalization + contradiction + temporal checks
+Knowledge
+Neo4j claim graph + vector retrieval; PostgreSQL/Supabase for app data
+Evidence
+Object storage + source registry + official/retailer/independent/consumer inputs
+Recommended implementation stack
+Frontend: Next.js + TypeScript + Tailwind + shadcn/ui. Suitable for the two-sided web experience and
+shared design system.
+Backend/orchestration: Next.js server/API plus optional Python FastAPI workers. Heavy document/media
+analysis, batch verification and long-running evidence retrieval should run asynchronously rather than
+inside a single browser request.
+Graph database: Neo4j. The claim/evidence relationships are naturally graph-shaped. Neo4j's GraphRAG
+tooling supports graph retrieval and vector retrieval patterns, allowing semantic retrieval to be combined
+with relationship-aware context. [R16]
+Relational app data: PostgreSQL / Supabase. Use for authentication, permissions, user accounts, source
+permissions, billing/plan data, UI settings and conventional transactional records. pgvector can provide an
+additional vector-search option if desired.
+Object storage: Supabase Storage or Cloudflare R2. Store original PDFs, images, video, screenshots and
+evidence snapshots. Keep the graph and relational DB free of large blobs.
+AI: Gemini API initially. Use multimodal understanding, structured outputs, Google Search grounding and
+URL/document context where appropriate. Keep an abstraction layer around the model provider so OpenAI
+or other models can be added later. [R10][R11][R12]
+Provenance: C2PA + supported AI provenance signals. C2PA provides a standard provenance model;
+supported model-specific signals can be supplemental evidence. [R14][R15]
+Search/retrieval: Google Search grounding initially. This is useful for discovery and citation. Later, add
+direct connectors and licensed sources for higher control. [R10]
+
+
+=== PAGE 14 ===
+AD-EVIDENCE - The Evidence Layer for AI-Era Advertising | Samartha Stage 0
+Page 14
+15. Data Model and Storage Architecture
+Recommended split:
+ Storage
+What belongs there
+Neo4j graph
+Brand, Product, Claim, Evidence, Source, Retailer, ConsumerReport, Advertisement,
+AIAsset, VerificationEvent and their relationships.
+PostgreSQL/Supabase
+Users, organizations, permissions, subscription state, UI settings, job state, audit index,
+moderation records and connector configuration.
+Object storage
+Original PDFs, screenshots, images, videos, extracted asset snapshots and signed evidence
+artifacts.
+Vector index
+Document chunks, source snippets, semantic claim representations for retrieval. Can live
+in Neo4j or pgvector depending on implementation.
+Example graph record for one claim:
+Product: XYZ Headphones Pro
+Claim: "Up to 40 hours battery life"
+Advertisement A: "Guaranteed 40-hour battery"
+Official evidence: manual page 18, retrieved 2026-09-27
+Retailer evidence: 40h, retrieved 2026-09-27
+Independent evidence: 38.4h under test conditions, date 2026-08-11
+Consumer cluster: 27-42h observed, n=127 reports
+Verification event: VE-2026-09-27-00042
+Status: context-dependent for real-world duration; ad wording contradicted because it adds a guarantee
+16. API and Service Architecture
+The public API should expose stable domain operations rather than raw model calls. Suggested endpoints:
+Endpoint / action
+Purpose
+POST /ads/analyze
+Create an advertisement verification job.
+POST /documents/ingest
+Ingest a brand/product document and create evidence candidates.
+POST /claims/extract
+Extract atomic claims from normalized content.
+GET /claims/{id}
+Return claim, evidence, conflicts, history and status.
+POST /evidence/search
+Search/collect candidate evidence for a claim.
+POST /verify/{claimId}
+Run verification for one claim.
+POST /reports/consumer
+Submit a consumer observation.
+POST /brands/products
+Create/update canonical product information.
+POST /recheck/{productId}
+Re-run freshness and conflict checks.
+GET /products/{identifier}
+Resolve product by canonical ID/GTIN/model.
+Async job principle: ad verification can involve OCR, transcription, web retrieval, multiple model calls and
+graph writes. The UI should display a job state such as queued -> processing -> evidence retrieval ->
+verification -> complete, with progress milestones and retry states.
+17. Security, Privacy and Evidence-Poisoning
+Defenses
+Tenant isolation: brand-private documents must never become public evidence by default. Every evidence
+record needs visibility metadata.
+Secrets: API keys live server-side; users never receive provider keys in the browser.
+
+
+=== PAGE 15 ===
+AD-EVIDENCE - The Evidence Layer for AI-Era Advertising | Samartha Stage 0
+Page 15
+Upload sandboxing: scan uploaded files, enforce size/type limits, strip executable content and reject
+unsupported payloads.
+Untrusted web content: webpages and documents retrieved for evidence are data, not instructions.
+Prompt-injection text inside a source must never override system rules or tool permissions.
+Evidence poisoning defense: store the source URL, retrieved timestamp, content hash/snapshot, source
+class and extraction anchors. A new source can add an observation or conflict, but should not silently
+rewrite authoritative product facts.
+Conflict transparency: preserve conflicting evidence as separate records; never average away a meaningful
+disagreement.
+Human escalation: legal, regulatory and high-risk claims are routed to human review.
+Privacy: consumer reports should minimize personal data, support deletion requests and avoid exposing
+identifying details publicly unless explicitly permitted.
+Abuse controls: rate-limit automated verification, protect against mass evidence flooding and require
+moderation for suspicious user-generated evidence.
+18. Differentiation from GPT/Gemini and Existing
+Products
+ Paragraph(
+'caseSensitive': 1
+'encoding': 'utf8'
+'text': 'Question'
+'frags': [ParaFrag(__ta
+g__='para', bold=1, fo
+ntName='DejaVuSans
+-Bold', fontSize=7.8,
+greek=0, italic=1,
+link=[], rise=0,
+text='Question', textC
+olor=Color(.090196,.2
+31373,.380392,1),
+us_lines=[])] 'style':
+'bulletText': None
+'debug': 0 )
+#Paragraph
+Paragraph( 'caseSensitive': 1
+'encoding': 'utf8' 'text': 'Generic LLM
+chat' 'frags':
+[ParaFrag(__tag__='para', bold=1,
+fontName='DejaVuSans-Bold',
+fontSize=7.8, greek=0, italic=1,
+link=[], rise=0, text='Generic LLM
+chat', textColor=Color(.090196,.231
+373,.380392,1), us_lines=[])] 'style':
+'bulletText': None 'debug': 0 )
+#Paragraph
+Paragraph( 'caseSensitive': 1 'encoding':
+'utf8' 'text': 'AD-EVIDENCE' 'frags':
+[ParaFrag(__tag__='para', bold=1,
+fontName='DejaVuSans-Bold',
+fontSize=7.8, greek=0, italic=1, link=[],
+rise=0, text='AD-EVIDENCE', textColor=Col
+or(.090196,.231373,.380392,1),
+us_lines=[])] 'style': 'bulletText': None
+'debug': 0 ) #Paragraph
+"Is this ad
+trustworthy?"
+Produces an opinion based on supplied
+context and model behavior.
+Extracts atomic claims and links each finding to
+persisted evidence.
+Where did the answer
+come from?
+May cite sources for the current chat, but
+there is no specialized persistent claim
+graph.
+Every finding has source, timestamp, evidence
+snippet and relationship to the claim.
+What happens next
+week?
+Run another chat.
+Re-check freshness, update the graph and
+preserve historical verification events.
+What if sources
+disagree?
+May summarize disagreement in prose.
+Stores both sources and an explicit conflict
+relationship.
+Consumer contribution
+Usually not part of the core workflow.
+Structured consumer observations become
+time-stamped evidence signals tied to claims.
+Brand workflow
+General-purpose document Q&A.;
+Brand Knowledge Base, pre-publication
+verification, rules, audit trail and reviewer
+workflow.
+Model dependence
+Product value is largely tied to model
+quality.
+Model-agnostic verification layer; providers can be
+swapped underneath.
+Existing solution reality: Adobe GenStudio provides brand governance, content validation and approval
+workflows; Persado provides compliance analysis, risk profiles, recommendations and audit trails. [R8][R9]
+This means AD-EVIDENCE should not claim to invent "AI marketing compliance." Its defensible difference
+should be the shared, evidence-centered claim graph and the consumer-side verification surface, plus
+
+
+=== PAGE 16 ===
+AD-EVIDENCE - The Evidence Layer for AI-Era Advertising | Samartha Stage 0
+Page 16
+temporal and cross-source conflict visibility.
+19. Competitor Landscape and Realistic Market Gap
+ Paragraph(
+'caseSensitive': 1
+'encoding': 'utf8' 'text':
+'Category' 'frags':
+[ParaFrag(__tag__='para',
+bold=1, fontName='DejaV
+uSans-Bold', fontSize=7.8,
+greek=0, italic=1, link=[],
+rise=0, text='Category', t
+extColor=Color(.090196,.2
+31373,.380392,1),
+us_lines=[])] 'style':
+'bulletText': None 'debug':
+0 ) #Paragraph
+Paragraph( 'caseSensitive': 1
+'encoding': 'utf8' 'text': 'What
+exists' 'frags':
+[ParaFrag(__tag__='para', bold=1,
+fontName='DejaVuSans-Bold',
+fontSize=7.8, greek=0, italic=1,
+link=[], rise=0, text='What exists', t
+extColor=Color(.090196,.231373,.3
+80392,1), us_lines=[])] 'style':
+'bulletText': None 'debug': 0 )
+#Paragraph
+Paragraph( 'caseSensitive': 1
+'encoding': 'utf8' 'text': 'Gap we can
+investigate' 'frags':
+[ParaFrag(__tag__='para', bold=1,
+fontName='DejaVuSans-Bold',
+fontSize=7.8, greek=0, italic=1,
+link=[], rise=0, text='Gap we can
+investigate', textColor=Color(.090196,.
+231373,.380392,1), us_lines=[])]
+'style': 'bulletText': None 'debug': 0 )
+#Paragraph
+Enterprise brand
+governance
+Adobe GenStudio brand rules, validation
+and approvals. [R8]
+Consumer-facing, claim-centric evidence
+network shared with brand-side records.
+Marketing compliance
+Persado analysis, regulations, disclosures,
+risk profiles and audit trail. [R9]
+Broader product-claim lineage across brand,
+retailer, independent and consumer evidence.
+AI provenance
+C2PA standard and supported AI
+watermark/provenance tools. [R14][R15]
+Connect provenance to the specific
+commercial claim and assess material
+consumer impact.
+Search / AI answer engines
+General AI assistants can retrieve or
+synthesize information. [R10]
+Persistent claim identity, source conflict graph
+and verification history independent of one
+chat.
+20. Evaluation and Quality Metrics
+A trust product needs measurable quality. Do not measure only whether the page looks good. Build a
+labeled evaluation set and track:
+Metric
+Purpose
+Claim extraction precision/recall/F1
+How accurately atomic claims are extracted from ads and documents.
+Product identity accuracy
+Percentage of analyzed ads linked to the correct brand/product/variant.
+Evidence retrieval precision
+How often retrieved sources are actually relevant to the claim.
+Citation coverage
+Share of final findings with traceable evidence anchors.
+Contradiction precision
+How often a contradiction flag is genuinely supported by the source pair.
+False-positive rate
+How often valid content is incorrectly flagged.
+Freshness accuracy
+How reliably time-sensitive findings expire/recheck as intended.
+Human reviewer agreement
+Agreement between system output and expert reviewer outcome on a
+benchmark set.
+Consumer comprehension
+Whether users can correctly explain why a claim was flagged after reading the
+report.
+Latency and cost
+Time and provider cost per verified ad/claim at target scale.
+21. Intelligent Learning / Continuous Improvement
+Loop
+The system becomes more useful when human review feeds the graph without allowing blind model
+self-training. Use a controlled feedback loop:
+
+
+=== PAGE 17 ===
+AD-EVIDENCE - The Evidence Layer for AI-Era Advertising | Samartha Stage 0
+Page 17
+Model finding -> reviewer outcome -> root-cause label -> rule/model test case -> benchmark update -> regression
+test -> controlled model/rule release -> monitoring
+Examples of root-cause labels:
+• wrong product variant
+• source mismatch
+• semantic overreach
+• unit conversion error
+• stale price
+• condition mismatch
+• unsupported superlative
+• provenance unavailable
+• consumer evidence low-quality
+• policy rule mismatch
+Important: consumer reports should contribute to aggregate signals only after moderation and quality
+controls. They should not automatically retrain a model or overwrite official evidence.
+22. Roadmap from Concept to Production
+ Phase
+Focus
+Phase 1 - Foundation
+Canonical Product, Claim, Evidence and Source schemas; brand/private evidence; basic
+claim extraction; basic verification statuses; explainable report.
+Phase 2 - Multi-source
+graph
+Retailer/official/independent source ingestion; conflict graph; freshness; product
+identity/GTIN; graph explorer.
+Phase 3 - Consumer
+network
+Consumer verify flow; structured reports; evidence aggregation; product public pages;
+shareable verification links.
+Phase 4 - Media
+provenance
+C2PA support; supported AI provenance signals; visual product-representation comparison.
+Phase 5 - Enterprise
+workflow
+Campaign batch review; reviewer queues; audit exports; organization permissions;
+connector framework.
+Phase 6 - Ecosystem/API
+Browser extension, mobile share sheet, commerce integrations, brand verification badges
+and public API.
+23. Stage 0 Submission-Ready Problem Statement
+Problem statement: Generative AI is allowing brands to create persuasive advertising content at
+increasing speed and scale, while the verification of product claims, brand integrity and AI transparency
+remains fragmented. Industry research shows that AI-related advertising incidents are already occurring,
+while formal governance remains uneven. At the same time, consumers increasingly encounter AI-assisted
+advertising and are using AI during product research, creating a new need for accessible ways to inspect
+the evidence behind commercial claims. [R1][R2][R4]
+Proposed solution: AD-EVIDENCE is an evidence-grounded AI advertising trust layer. It converts
+advertisements into atomic claims, connects those claims to a persistent evidence graph containing official
+product data, independent evidence, retailer observations, provenance signals and structured consumer
+reports, detects contradictions and context differences, surfaces potential AI-transparency issues, and
+explains every finding with traceable sources. The same infrastructure supports two sides of the
+ecosystem: brands verify content before publication; consumers verify advertising claims before purchase.
+Why it is different: the platform is not itself a foundation model and does not depend on one LLM to decide
+truth. AI performs extraction and ambiguous semantic reasoning; deterministic rules handle exact
+comparisons; the graph preserves relationships, history and provenance; humans remain responsible for
+consequential legal/compliance decisions.
+Core innovation hypothesis: commercial claims can become persistent, verifiable objects that travel with a
+product across advertisements, product documents, retailer listings and consumer observations. This
+
+
+=== PAGE 18 ===
+AD-EVIDENCE - The Evidence Layer for AI-Era Advertising | Samartha Stage 0
+Page 18
+creates a shared evidence layer rather than another one-off AI conversation.
+24. Risks, Boundaries and Non-Goals
+ Risk / boundary
+Design response
+False certainty
+Never convert missing evidence into "false". Use Insufficient Evidence.
+Wrong product identity
+Do not verify claims until product/model/variant identity is sufficiently established.
+Source copying
+Retailers can copy manufacturer text; do not count copied text as independent
+corroboration.
+Consumer bias
+Consumer reports are not representative by default; label them as observations
+and preserve context.
+AI detection overreach
+AI-generated content is not synonymous with misleading content. Provenance is
+one dimension.
+Legal overclaim
+The system flags potential issues; it does not certify legal compliance.
+Stale evidence
+Time-sensitive claims must have freshness rules and re-verification triggers.
+Adversarial input
+Documents and webpages can contain prompt injections; source content must
+never override system/tool controls.
+Competitor overlap
+Several companies already address pieces of governance/compliance. The product
+must prove its unique claim-graph + consumer-side value rather than claim a
+category is empty.
+Non-goals
+Do not become a universal product-review website, a generalized chatbot, or an
+autonomous legal decision-maker.
+25. Research and Technical Sources
+[R1] IAB, "AI Adoption Is Surging in Advertising, but is the Industry Prepared for Responsible AI?" Aug. 21, 2025. Survey of 125 U.S.
+ad-industry executives; survey fielded July 2024.
+https://www.iab.com/insights/ai-adoption-is-surging-in-advertising-but-is-the-industry-prepared-for-responsible-ai/
+[R2] IAB, "The AI Ad Gap Widens." Jan. 15, 2026. Survey of 505 U.S. Gen Z/Millennial consumers and 104 U.S. ad-industry executives;
+conducted Oct. 2025-Jan. 2026. https://www.iab.com/insights/the-ai-gap-widens/
+[R3] IAB, "AI Transparency & Disclosure Framework V2." Aug. 18, 2026.
+https://www.iab.com/guidelines/ai-transparency-disclosure-framework-v2/
+[R4] Boston Consulting Group, "Consumers Trust AI to Buy Better. Brands Must Adapt." Jan. 2, 2026.
+https://www.bcg.com/publications/2026/consumers-trust-ai-to-buy-better-brands-must-adapt
+[R5] Google Ads Policy Help, "Updates to AI labeling requirements (July 2026)." Posted July 9, 2026.
+https://support.google.com/adspolicy/answer/17257106
+[R6] Ipsos, "Trust and transparency emerge key cornerstones of AI usage among Indians: Ipsos AI Monitor 2025." June 19, 2025. Survey
+of 23,000 people across 30 countries.
+https://www.ipsos.com/en-in/trust-and-transparency-emerge-key-cornerstones-ai-usage-among-indians-ipsos-ai-monitor-2025
+[R7] Government of India, Department of Consumer Affairs, "The Guidelines for Prevention of Misleading Advertisements and
+Endorsements for Misleading Advertisements, 2022."
+https://consumeraffairs.nic.in/latestnews/guidelines-prevention-misleading-advertisements-and-endorsements-misleading
+[R8] Adobe GenStudio for Performance Marketing, "Brand compliance."
+https://business.adobe.com/products/genstudio/performance-marketing/brand-compliance.html
+[R9] Persado, "Marketing Compliance / Comply." https://www.persado.com/platform
+[R10] Google AI for Developers, "Grounding with Google Search - Gemini API." https://ai.google.dev/gemini-api/docs/google-search
+[R11] Google AI for Developers, "Structured outputs - Gemini API." https://ai.google.dev/gemini-api/docs/structured-output
+[R12] Google AI for Developers, "Document understanding - Gemini API." https://ai.google.dev/gemini-api/docs/document-processing
+[R13] GS1, "What information is available in Verified by GS1?"
+https://support.gs1.org/support/solutions/articles/43000734119-what-information-is-available-in-verified-by-gs1-
+[R14] C2PA Specifications, provenance and Content Credentials. https://spec.c2pa.org/about/about/
+[R15] Google DeepMind, SynthID watermarking and limitations.
+https://deepmind.google/blog/watermarking-ai-generated-text-and-video-with-synthid/
+[R16] Neo4j GraphRAG documentation. https://neo4j.com/docs/neo4j-graphrag-python/current/user_guide_rag/
+
+
+=== PAGE 19 ===
+AD-EVIDENCE - The Evidence Layer for AI-Era Advertising | Samartha Stage 0
+Page 19
+Name note: AD-EVIDENCE is a working project title for the Samartha concept. Before public launch,
+perform a trademark/domain/name-availability check and select a final brand identity.
+
+

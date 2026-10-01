@@ -1,0 +1,271 @@
+TOTAL PAGES: 5
+
+=== PAGE 1 ===
+AD-EVIDENCE — New Solution & Features
+Page 1
+ AD-EVIDENCE
+ The Evidence Layer for AI-Era Advertising
+NEW SOLUTION & FEATURE SPECIFICATION
+Core idea: Do not verify an advertisement only as one piece of content. Identify the important claims inside it, give
+each claim a persistent identity, connect it to evidence from multiple sources, detect conflicts and changes, and make
+the evidence understandable to brands and consumers.
+ “Don’t just tell people what to believe. Show them the evidence behind the claim.”
+1. The New Solution
+AD-EVIDENCE is a claim-centered verification platform for commercial advertising. When a user submits an
+advertisement, product page, marketing document, influencer promotion, or similar content, the system identifies
+meaningful claims such as battery life, price, warranty, performance, certification, delivery promise, or comparative
+wording.
+Each claim is connected to evidence rather than receiving only a black-box trust score. The platform creates a
+persistent Claim Evidence Graph connecting the product, claim, advertisement, sources, evidence, conditions,
+dates and later observations.
+Core flow
+ADVERTISEMENT → CLAIM EXTRACTION → PRODUCT IDENTITY → EVIDENCE COLLECTION → CROSS-SOURCE CHECK →
+CLAIM PASSPORT → EXPLAINABLE RESULT
+2. Claim Passport
+A Claim Passport is a persistent record for one important commercial claim. Instead of checking the same claim from
+scratch every time it appears, new appearances can be linked to the existing claim when product, meaning and
+context match.
+FIELD
+EXAMPLE
+Claim ID
+CLM-82917
+Product
+XYZ Wireless Headphones
+Claim
+“50-hour battery life”
+Official evidence
+Up to 40 hours
+Retailer evidence
+40 hours
+Independent evidence
+38.4 hours under stated conditions
+Consumer observations
+27–42 hours, with conditions recorded
+Conditions
+ANC, volume, firmware, test method
+Last verified
+Latest evidence-check date/time
+Status
+Supported / Contradicted / Inconclusive / Outdated
+3. Claim Evidence Graph
+
+
+=== PAGE 2 ===
+AD-EVIDENCE — New Solution & Features
+Page 2
+The graph is the foundation of the platform. It connects one claim to multiple evidence types, different advertisements,
+dates, conditions, and responses. This allows the system to follow a commercial claim instead of treating every
+advertisement as an isolated event.
+PRODUCT
+■
+■■■ CLAIM: “50-hour battery”
+■    ■■■ Official brand specification
+■    ■■■ Retailer data
+■    ■■■ Independent test
+■    ■■■ Consumer observations
+■
+■■■ Instagram ad
+■■■ YouTube ad
+■■■ Influencer post
+■■■ Product page
+4. Cross-Source Conflict Detection
+The system compares the claim with several sources and highlights disagreement. It should not automatically declare
+a source “true” or “false”; it should show the evidence and explain the conflict.
+SOURCE
+VALUE
+MEANING
+Advertisement
+50 hours
+Claim being checked
+Official specification
+Up to 40 hours
+Direct conflict
+Retailer A
+40 hours
+Supports official value
+Independent test
+38.4 hours
+Different measurement
+Consumer observations
+27–42 hours
+Observations; conditions matter
+Example result: “The advertisement claims 50 hours, while the current official specification states up to 40 hours.
+Independent evidence reports a lower result under stated conditions. A conflict was detected; review the source
+conditions before drawing a final conclusion.”
+5. Context-Aware Verification
+A number alone is not enough. Claims often contain conditions. The system should compare value, unit, condition,
+time, model/version, region and test method where available.
+Example: the official document says “up to 50 hours with ANC off”, while an advertisement only says “50-hour
+battery life.” The number matches, but the condition is missing. The system should flag Context Missing instead of
+automatically calling the claim false.
+6. Time-Aware Verification
+Prices, discounts, specifications, warranties, subscriptions and features can change. AD-EVIDENCE records when
+evidence was observed and can compare historical and current states.
+Example: ■4,999 may have been valid in July but the current price may be ■5,499. The system should explain that
+the lower price was observed historically rather than blindly calling the old advertisement false.
+7. Consumer Evidence
+Consumer input should not become another star-rating website. A consumer observation can be structured as a
+claim, observed value, conditions, date and optional supporting material.
+
+
+=== PAGE 3 ===
+AD-EVIDENCE — New Solution & Features
+Page 3
+Example: a consumer reports 28 hours with ANC enabled and high volume. Repeated observations can reveal a
+pattern under those conditions while remaining clearly separated from manufacturer specifications and independent
+laboratory measurements.
+8. Brand Response and Dispute Layer
+Brands should be able to respond to evidence without deleting conflicting evidence. For example, a company may
+explain that an independent test used conditions different from its official test.
+ Claim → Evidence → Conflict → Brand response → Updated evidence
+9. Track Claims Across the Advertising Ecosystem
+The same claim may appear in Instagram ads, YouTube videos, influencer posts, retailer listings, company websites,
+brochures or AI shopping recommendations. When the system establishes that they refer to the same product and
+claim, they can be linked to the same Claim Passport.
+This turns AD-EVIDENCE from a one-time ad checker into a system that can monitor how a commercial claim travels,
+changes, gains evidence or becomes outdated.
+10. Evidence Coverage Instead of a Simple Trust Score
+The platform should show what has and has not been verified rather than presenting an arbitrary single number as if it
+were objective truth.
+CHECK
+STATUS
+Product identity
+✓ Verified
+Official specification
+✓ Found
+Current price
+✓ / ? Depends on source freshness
+Independent evidence
+✓ / Not found
+Consumer observations
+✓ / Not enough observations
+Comparative benchmark
+Not available
+Content provenance
+Available / Missing / Uncertain
+11. AI and Provenance
+AI such as Gemini can help understand advertisements, images and documents, extract claims, match products,
+summarize evidence and identify possible relationships. But AI is not the final judge.
+The core verification layer combines AI with deterministic checks where possible: numerical comparison, price
+comparison, dates, model/version and conditions. Provenance signals such as C2PA can be recorded when present,
+but missing provenance should not automatically mean that content is fake or AI-generated.
+12. One System for Brands and Consumers
+ BRAND
+SHARED CORE
+CONSUMER
+Check campaign
+Claim Passport
+Submit ad
+Verify before publishing
+Evidence Graph
+Verify before buying
+Monitor claim usage
+Conflict detection
+See conflicts
+
+
+=== PAGE 4 ===
+AD-EVIDENCE — New Solution & Features
+Page 4
+BRAND
+SHARED CORE
+CONSUMER
+Respond to evidence
+Time history
+Submit observations
+Update evidence
+Source provenance
+Read explanations
+13. What Makes AD-EVIDENCE Different?
+ Claim-centered: the claim is the persistent object, not just the advertisement.
+ Evidence graph: sources and relationships remain connected.
+ Conflict detection: disagreements between official, retailer, independent and consumer evidence are surfaced.
+ Context-aware: conditions, model/version, region, time and test method can be considered.
+ Time-aware: outdated prices and specifications can be detected.
+ Claim Passport: the same claim can be followed across ads and platforms.
+ Two-sided: one evidence layer serves marketing teams and consumers.
+ Explainable: users see the claim, sources and reason for the result.
+ AI-assisted, not AI-dependent: AI helps understand content; the evidence system is the core product.
+Core USP
+ “Don’t verify the advertisement once. Verify the claim wherever it appears.”
+An advertisement can change or disappear, but a commercial claim can travel across websites, marketplaces, social
+media, influencer content and AI shopping experiences. AD-EVIDENCE is designed to follow that claim and keep its
+evidence connected.
+14. Suggested System Architecture
+USER / BRAND / CONSUMER
+↓
+CONTENT INGESTION
+↓
+AI CLAIM EXTRACTION
+↓
+PRODUCT + CONDITION + PROVENANCE EXTRACTION
+↓
+CLAIM EVIDENCE GRAPH
+↓
+BRAND + RETAILER + INDEPENDENT + CONSUMER EVIDENCE
+↓
+VERIFICATION ENGINE
+↓
+SUPPORT / CONFLICT / CONTEXT / OUTDATED CHECKS
+↓
+CLAIM PASSPORT
+↓
+EXPLAINABLE RESULT
+15. Technology Roles
+ TECH / COMPONENT
+ROLE
+Multimodal AI (e.g., Gemini)
+Understand ads/documents/images; extract claims and conditions; summarize evidence.
+Neo4j / graph database
+Store relationships among products, claims, sources, ads, evidence and time.
+
+
+=== PAGE 5 ===
+AD-EVIDENCE — New Solution & Features
+Page 5
+TECH / COMPONENT
+ROLE
+PostgreSQL / relational DB
+Users, projects, structured records, audit logs and application data.
+Verification engine
+Deterministic checks for numbers, units, prices, dates, models and conditions.
+Search / retrieval
+Find relevant official, retailer and independent evidence.
+Provenance layer
+Record C2PA or other provenance signals when available.
+Web application
+Brand dashboard, consumer verification page, Claim Passport and evidence explorer.
+16. End-to-End Example
+ STEP
+ACTION
+1
+User submits an advertisement claiming “50-hour battery life.”
+2
+System extracts the claim and identifies the product.
+3
+System checks for an existing Claim Passport.
+4
+Official, retailer and independent evidence are retrieved.
+5
+Conditions such as ANC, model and test method are compared.
+6
+Official evidence says up to 40 hours, creating a conflict.
+7
+Consumer observations are shown separately with conditions.
+8
+User receives an explainable conflict report with sources.
+9
+The claim remains available for future advertisements and evidence updates.
+17. Recommended Result Categories
+Supported — evidence supports the claim.
+Contradicted — evidence conflicts with the claim.
+Context Missing — important conditions are absent or unclear.
+Outdated — the evidence or claim is no longer current.
+Insufficient Evidence — not enough reliable evidence was found.
+Conflicting Sources — credible sources disagree and the system should show the disagreement.
+ AD-EVIDENCE
+ See the claim. See the evidence.
+This document describes the proposed product direction and system design for the hackathon concept. Specific data
+sources, integrations and verification rules should be validated before production use.
+
+

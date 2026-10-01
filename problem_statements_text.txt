@@ -1,0 +1,231 @@
+TOTAL PAGES: 5
+
+=== PAGE 1 ===
+Samartha Stage 0 — Research & Problem Statement Exploration
+Page 1
+ Samartha Hackathon — Stage 0
+ Research-backed problem statements for Innovation in Education and Brand Marketing
+Purpose: This document converts the researched problem spaces into concrete ideas that a student team can
+investigate for Stage 0. The emphasis is on real-world pain points, potential AI applications, and prototypes that
+can be demonstrated within a 24-hour hackathon.
+Research-backed context
+ Education
+Learning outcomes can vary substantially within the same classroom; teachers have limited capacity for
+individualized diagnosis and feedback.
+Education + AI
+Generative AI can help with tasks, but unguided use can allow students to obtain answers without
+necessarily improving learning.
+Employability
+Employers increasingly emphasize skills, practical evidence and skills assessments, while graduates
+can face gaps between academic learning and workplace requirements.
+Brand marketing
+Marketing data is fragmented across platforms, making measurement and attribution difficult.
+Creator marketing
+Follower counts alone do not capture creator suitability, audience quality, brand fit or campaign
+effectiveness.
+AI marketing
+AI-generated marketing introduces questions around transparency, claims, brand consistency and
+consumer trust.
+Consumer discovery
+Generative AI is becoming part of shopping and product-research journeys, creating a new surface for
+brand visibility.
+Theme 1 — Innovation in Education
+These problem spaces focus on learning diagnosis, responsible AI-assisted learning, employability, skills evidence
+and teacher workload.
+E1 — AI Misconception Mapper
+ Real-world problem
+Most learning systems can identify that an answer is wrong, but they often do not identify the underlying
+misconception that caused the mistake. Students in the same class can have very different learning
+levels, while teachers have limited time to diagnose each student's reasoning.
+Proposed solution
+An AI system that analyses answer patterns, code submissions or worked solutions to infer recurring
+misconceptions and present a learning map to both student and teacher.
+Core workflow
+Student answers → mistake-pattern analysis → misconception detection → targeted intervention →
+teacher/class heatmap.
+24-hour MVP
+Start with one subject such as C programming or mathematics. Use a small bank of questions and
+common misconception patterns.
+E2 — Socratic Learning Agent
+ Real-world problem
+Students can use generative AI to obtain complete answers to assignments. This can improve task
+completion without necessarily improving the student's own understanding.
+Proposed solution
+A tutoring agent that guides the learner through questions, hints and progressively stronger support
+instead of immediately revealing the complete solution.
+Core workflow
+Student asks → AI estimates understanding → guiding question → student attempt → misconception
+detected → hint → learning trail.
+
+
+=== PAGE 2 ===
+Samartha Stage 0 — Research & Problem Statement Exploration
+Page 2
+24-hour MVP
+Build the experience around a small set of mathematics, programming or reasoning problems.
+Demonstrate answer generation versus learning guidance.
+E3 — AI Curriculum-to-Career Gap Analyzer
+ Real-world problem
+College curricula and rapidly changing industry skill requirements can diverge. Students and institutions
+need a clearer way to understand which skills are covered, missing or becoming important.
+Proposed solution
+Compare course syllabi and learning outcomes against current job descriptions and industry skill
+requirements, then generate a gap map and learning roadmap.
+Core workflow
+Syllabus + job descriptions → skill extraction → normalization → coverage/gap analysis → student
+roadmap + institutional insights.
+24-hour MVP
+Use a focused domain such as software engineering. Upload a syllabus and job descriptions, extract
+skills, and visualize curriculum-versus-market gaps.
+E4 — SkillProof: Evidence-Based Skill Verification
+ Real-world problem
+A certificate or resume claim does not necessarily demonstrate that a student can perform a practical
+skill. Employers increasingly use skills assessments and work evidence.
+Proposed solution
+A system that gives students short practical challenges, observes their work and produces a structured
+skill-evidence profile rather than only a certificate.
+Core workflow
+Skill claim → practical challenge → solution/debugging evidence → competency analysis → verifiable
+skill profile.
+24-hour MVP
+Prototype one skill, such as C programming. Measure correctness, testing, debugging and reasoning,
+then generate an evidence report.
+E5 — AI Teaching Copilot
+ Real-world problem
+Teachers face substantial marking and administrative workloads, making individualized feedback difficult
+at scale.
+Proposed solution
+An AI decision-support system that groups students by misconception, summarizes recurring errors and
+highlights where teacher intervention can have the greatest effect.
+Core workflow
+Student submissions → AI analysis → misconception clusters → class heatmap → teacher intervention
+suggestions.
+24-hour MVP
+Use a small classroom dataset. Show how many individual submissions become a simple class-level
+intervention dashboard.
+
+
+=== PAGE 3 ===
+Samartha Stage 0 — Research & Problem Statement Exploration
+Page 3
+Theme 2 — Brand Marketing
+These problem spaces focus on measurement, creator intelligence, AI-generated content governance, AI-era
+brand visibility, consumer signals and advertising fatigue.
+B1 — Cross-Channel Marketing Truth Engine
+ Real-world problem
+Brands advertise across search, social media, video, influencers, email and websites. Each platform
+reports different metrics, making it difficult to connect marketing activity with business outcomes.
+Proposed solution
+A unified analytics layer that accepts data from multiple channels, normalizes metrics and explains which
+activities appear to contribute to conversions or other business outcomes.
+Core workflow
+CSV/API data → metric normalization → cross-channel analysis → attribution signals → AI explanation.
+24-hour MVP
+For the hackathon, use CSV uploads or simulated APIs rather than integrating many live platforms. Focus
+on the insight layer.
+B2 — Creator Intelligence Engine
+ Real-world problem
+Follower count is an incomplete measure of creator value. Brands also need audience relevance,
+engagement quality, brand fit, authenticity, safety and historical campaign evidence.
+Proposed solution
+Analyze creator profiles and campaign data to produce a structured suitability profile for a particular brand
+or campaign.
+Core workflow
+Creator data → audience/engagement analysis → brand-fit analysis → risk signals → campaign
+suitability profile.
+24-hour MVP
+Create a small synthetic or public-data dataset and demonstrate why creators with different follower
+counts can have different campaign suitability.
+B3 — Brand Trust Guardian for AI-Generated Marketing
+ Real-world problem
+Brands can generate large volumes of AI-created copy, images and video, but must still manage
+unsupported claims, brand consistency, tone, disclosure and consumer trust.
+Proposed solution
+A pre-publication AI review layer that checks marketing content against brand guidelines, evidence for
+product claims and defined risk rules.
+Core workflow
+AI-generated content → claim check → brand guideline check → tone/context check → risk report →
+human approval.
+24-hour MVP
+Build a brand rulebook and a small set of marketing assets. Demonstrate how the system catches
+deliberately inserted claim or brand-safety problems.
+B4 — AI Brand Visibility Monitor
+ Real-world problem
+Consumers are increasingly using generative AI during product research. Brands therefore have a new
+question: how are AI systems representing, comparing and recommending their brand?
+Proposed solution
+Run standardized consumer-style questions against selected AI systems or stored response datasets
+and analyze brand mentions, positioning, attributes and competitor context.
+Core workflow
+Consumer questions → AI responses → brand/entity extraction → competitor/context analysis → visibility
+report.
+24-hour MVP
+For a 24-hour MVP, use a controlled set of questions and captured responses. Focus on analytics and
+insight rather than building a large crawler.
+B5 — Consumer Signal Radar
+
+
+=== PAGE 4 ===
+Samartha Stage 0 — Research & Problem Statement Exploration
+Page 4
+Real-world problem
+Consumer interests and complaints can change quickly. Marketing teams need early signals from search
+behavior, reviews, social conversations and other feedback channels.
+Proposed solution
+Aggregate multiple consumer-signal sources and detect emerging themes, changes in sentiment and
+potential product/marketing opportunities.
+Core workflow
+Signals → clustering → trend detection → sentiment/theme analysis → opportunity alert.
+24-hour MVP
+Start with reviews/comments or a prepared dataset for one category. Demonstrate how many small
+signals become one actionable trend.
+B6 — Attention-Aware Marketing Engine
+ Real-world problem
+Ad fatigue and rising acquisition costs create pressure to improve how often and where customers are
+exposed to marketing messages.
+Proposed solution
+Use exposure history, engagement and customer-stage signals to recommend whether to show, delay,
+change or stop a marketing message.
+Core workflow
+Exposure history + engagement + customer stage → fatigue estimation → action recommendation.
+24-hour MVP
+Use a simulated customer journey and campaign dataset. Demonstrate how the system avoids
+repeatedly showing the same message to an overexposed user.
+How to select a Stage-0 problem
+ Pain
+Can we clearly identify who experiences the problem and what it costs them?
+Originality
+Are we solving a specific gap rather than building a generic chatbot/dashboard?
+AI necessity
+Does AI perform reasoning, diagnosis, prediction, classification or adaptation that materially helps?
+Data
+Can we obtain enough real, synthetic or public data to demonstrate the concept?
+24-hour feasibility
+Can the core workflow be demonstrated convincingly within the hackathon?
+Demo clarity
+Can a judge understand the value within 30–60 seconds of seeing the prototype?
+Scalability
+Could the prototype become a real product after the hackathon?
+Research sources
+ OECD — Digital Education Outlook 2026:
+https://www.oecd.org/en/publications/oecd-digital-education-outlook-2026_062a7394-en.html
+ ASER Centre — ASER 2024: https://asercentre.org/aser-2024/
+ Mercer — India Graduate Skill Index 2025:
+https://www.mercer.com/insights/talent-and-transformation/talent-assessment/indias-graduate-skill-index-2025/
+ World Economic Forum — Future of Jobs Report 2025: https://www.weforum.org/publications/the-future-of-jobs-report-2025/
+ IAB — Advertising measurement research: https://www.iab.com/topics/project-eidos/
+ BCG — India's Creator Economy:
+https://www.bcg.com/publications/2025/india-from-content-to-commerce-mapping-indias-creator-economy
+ Ipsos — State of Digital Marketing in India 2025–26: https://www.ipsos.com/en-in/state-digital-marketing-india-2025-26
+ BCG — Consumers, AI and shopping journeys:
+https://www.bcg.com/publications/2026/consumers-trust-ai-to-buy-better-brands-must-adapt
+ Kantar — India Search / consumer insight research: https://www.kantar.com/campaigns/apac/india-search-shows-the-future
+
+
+=== PAGE 5 ===
+Samartha Stage 0 — Research & Problem Statement Exploration
+Page 5
+Note: These are problem spaces for further validation, not claims that every proposed solution is already proven commercially. The final
+Stage-0 submission should narrow the selected problem using direct evidence, competitor analysis and a clearly defined target user.
+
+

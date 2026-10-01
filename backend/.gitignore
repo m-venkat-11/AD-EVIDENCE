@@ -1,0 +1,5 @@
+# AD-EVIDENCE Backend
+.env
+__pycache__/
+*.pyc
+.venv/

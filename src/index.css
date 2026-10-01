@@ -1,0 +1,305 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Space Grotesk', 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* ==================================================
+     OFFICIAL 6-COLOR BRAND PALETTE (STRICT)
+     AD-EVIDENCE Futuristic Intelligence Platform
+     
+     #06070A - Void Black (Primary background)
+     #3D5AFE - Electric Cobalt (Primary accent)
+     #FF2FA3 - Synth Magenta (Secondary accent)
+     #FF8A1E - Toxic Amber (Attention/warning)
+     #AEB6C2 - Titanium Fog (Secondary text/borders)
+     #F5F7FF - Holographic Pearl (Primary text)
+     ================================================== */
+  --c-void: #070913;
+  --c-cobalt: #3D5AFE;
+  --c-cyan: #00E5FF;
+  --c-magenta: #FF2FA3;
+  --c-amber: #FF8A1E;
+  --c-fog: #AEB6C2;
+  --c-pearl: #F5F7FF;
+
+  /* THEME: FUTURISTIC HIGH-TECH INTELLIGENCE (MATCHING REFERENCE IMAGE) */
+  --bg-app: #070913;
+  --bg-gradient: radial-gradient(ellipse at 50% -10%, rgba(61, 90, 254, 0.18) 0%, transparent 60%),
+                 radial-gradient(circle at 92% 18%, rgba(255, 47, 163, 0.14) 0%, transparent 40%),
+                 radial-gradient(circle at 8% 75%, rgba(255, 138, 30, 0.10) 0%, transparent 45%),
+                 radial-gradient(circle at 50% 100%, rgba(0, 229, 255, 0.08) 0%, transparent 50%),
+                 #070913;
+  --bg-sidebar: #060810;
+  --bg-header: rgba(7, 9, 19, 0.94);
+  --bg-surface: rgba(12, 17, 34, 0.88);
+  --bg-surface-secondary: rgba(16, 23, 45, 0.82);
+  --bg-surface-subtle: rgba(22, 31, 58, 0.65);
+  --bg-surface-hover: rgba(28, 40, 75, 0.6);
+  --bg-card: rgba(11, 16, 32, 0.92);
+  --bg-card-elevated: rgba(15, 22, 42, 0.95);
+
+  --border-light: rgba(61, 90, 254, 0.14);
+  --border-subtle: rgba(61, 90, 254, 0.28);
+  --border-medium: rgba(61, 90, 254, 0.45);
+  --border-strong: #3D5AFE;
+  --border-accent: #00E5FF;
+  --border-magenta: rgba(255, 47, 163, 0.45);
+  --border-amber: rgba(255, 138, 30, 0.45);
+
+  --text-primary: #F5F7FF;
+  --text-secondary: #AEB6C2;
+  --text-muted: #7B8599;
+  --text-subtle: #515B70;
+  --text-inverse: #070913;
+
+  /* Semantic Status (Using brand palette only) */
+  --status-supported-bg: rgba(0, 229, 255, 0.12);
+  --status-supported-border: rgba(0, 229, 255, 0.45);
+  --status-supported-text: #00E5FF;
+  --status-supported-icon: #00E5FF;
+
+  --status-review-bg: rgba(255, 138, 30, 0.12);
+  --status-review-border: rgba(255, 138, 30, 0.42);
+  --status-review-text: #FF8A1E;
+  --status-review-icon: #FF8A1E;
+
+  --status-conflict-bg: rgba(255, 47, 163, 0.14);
+  --status-conflict-border: rgba(255, 47, 163, 0.48);
+  --status-conflict-text: #FF2FA3;
+  --status-conflict-icon: #FF2FA3;
+
+  --status-neutral-bg: rgba(174, 182, 194, 0.1);
+  --status-neutral-border: rgba(174, 182, 194, 0.25);
+  --status-neutral-text: #AEB6C2;
+  --status-neutral-icon: #AEB6C2;
+
+  /* Elevations & Radiant Glow Shadows */
+  --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 8px 24px -2px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 14px 34px -4px rgba(0, 0, 0, 0.7);
+  --shadow-xl: 0 22px 48px -6px rgba(0, 0, 0, 0.8);
+  --shadow-glow-cobalt: 0 0 24px rgba(61, 90, 254, 0.35);
+  --shadow-glow-cyan: 0 0 20px rgba(0, 229, 255, 0.35);
+  --shadow-glow-magenta: 0 0 24px rgba(255, 47, 163, 0.35);
+  --shadow-glow-amber: 0 0 20px rgba(255, 138, 30, 0.3);
+
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  --sidebar-width: 260px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  background: var(--bg-gradient);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography Hierarchy */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--text-primary);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+h1 { font-size: 1.75rem; line-height: 1.25; }
+h2 { font-size: 1.35rem; line-height: 1.3; }
+h3 { font-size: 1.1rem; line-height: 1.35; }
+h4 { font-size: 0.95rem; line-height: 1.4; }
+
+p {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+code, pre, .mono {
+  font-family: var(--font-mono);
+}
+
+/* Base Card & Surface */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card:hover {
+  border-color: var(--border-medium);
+  box-shadow: var(--shadow-md);
+}
+
+/* Status Badges */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.725rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+.status-pill.SUPPORTED {
+  background: var(--status-supported-bg);
+  border: 1px solid var(--status-supported-border);
+  color: var(--status-supported-text);
+}
+
+.status-pill.CONTRADICTED, .status-pill.CONFLICTING_SOURCES {
+  background: var(--status-conflict-bg);
+  border: 1.5px solid var(--status-conflict-border);
+  color: var(--status-conflict-text);
+}
+
+.status-pill.CONTEXT_MISSING, .status-pill.NEEDS_REVIEW {
+  background: var(--status-review-bg);
+  border: 1px solid var(--status-review-border);
+  color: var(--status-review-text);
+}
+
+.status-pill.OUTDATED {
+  background: rgba(255, 138, 30, 0.12);
+  border: 1px solid rgba(255, 138, 30, 0.35);
+  color: #FF8A1E;
+}
+
+.status-pill.INSUFFICIENT_EVIDENCE, .status-pill.UNDER_REVIEW {
+  background: var(--status-neutral-bg);
+  border: 1px solid var(--status-neutral-border);
+  color: var(--status-neutral-text);
+}
+
+/* Buttons (Futuristic Palette) */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 0.835rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1.5px solid transparent;
+  outline: none;
+  font-family: var(--font-sans);
+}
+
+/* Primary Button: Electric Cobalt */
+.btn-primary {
+  background: #3D5AFE;
+  color: #F5F7FF;
+  border-color: rgba(61, 90, 254, 0.6);
+  box-shadow: 0 2px 10px rgba(61, 90, 254, 0.3);
+}
+
+.btn-primary:hover {
+  background: #536DFE;
+  box-shadow: 0 4px 20px rgba(61, 90, 254, 0.5);
+  border-color: #3D5AFE;
+}
+
+/* Secondary Button: Transparent with fog border */
+.btn-secondary {
+  background: transparent;
+  color: #F5F7FF;
+  border-color: rgba(174, 182, 194, 0.3);
+  box-shadow: var(--shadow-xs);
+}
+
+.btn-secondary:hover {
+  border-color: #FF2FA3;
+  color: #FF2FA3;
+  box-shadow: 0 0 12px rgba(255, 47, 163, 0.15);
+}
+
+/* Dark Button */
+.btn-dark {
+  background: #12131A;
+  color: #F5F7FF;
+  border-color: rgba(174, 182, 194, 0.15);
+}
+
+.btn-dark:hover {
+  background: #1A1B24;
+  border-color: #3D5AFE;
+}
+
+/* Attention Button: Toxic Amber */
+.btn-danger {
+  background: rgba(255, 138, 30, 0.12);
+  color: #FF8A1E;
+  border-color: rgba(255, 138, 30, 0.35);
+}
+
+.btn-danger:hover {
+  background: #FF8A1E;
+  color: #06070A;
+}
+
+.btn-sm {
+  padding: 5px 12px;
+  font-size: 0.75rem;
+  border-radius: var(--radius-sm);
+}
+
+/* Input Fields */
+.input-text, .textarea, .select {
+  width: 100%;
+  background: var(--bg-surface-subtle);
+  border: 1.5px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  padding: 9px 14px;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-text:focus, .textarea:focus, .select:focus {
+  border-color: #3D5AFE;
+  box-shadow: 0 0 0 3px rgba(61, 90, 254, 0.2);
+}
+
+/* Dark Intelligence Scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(174, 182, 194, 0.15);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(174, 182, 194, 0.3);
+}

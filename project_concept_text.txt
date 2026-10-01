@@ -1,0 +1,346 @@
+TOTAL PAGES: 8
+
+=== PAGE 1 ===
+AD-EVIDENCE - AI Advertising Trust Layer | Samartha Stage 0
+Page 1
+ SAMARTHA - STAGE 0 PROJECT CONCEPT
+ AD-EVIDENCE
+ The AI Advertising Trust Layer
+Core idea
+A two-sided verification layer for the AI advertising era: marketing teams can validate
+claims before publishing, and consumers can verify claims when they encounter an
+advertisement before purchasing.
+Central problem
+Generative AI can scale persuasive advertising far faster than traditional human review
+can scale. This creates a risk that unsupported, exaggerated, contradictory, off-brand or
+insufficiently disclosed claims reach consumers.
+Key difference
+AD-EVIDENCE is not another general AI chatbot. Its value comes from a structured
+evidence layer, claim-level provenance, brand/product knowledge, rules, uncertainty
+handling and a shared workflow for both brands and consumers.
+Working project title: AD-EVIDENCE - The AI Advertising Trust Layer
+This document is intended for team discussion and Stage 0 submission development. The research statistics are the latest published sources located
+for this document as of September 2026; they are not live real-time telemetry.
+
+
+=== PAGE 2 ===
+AD-EVIDENCE - AI Advertising Trust Layer | Samartha Stage 0
+Page 2
+1. Problem Statement - In Simple Terms
+Advertising is becoming easier to create with generative AI. A marketing team can generate many versions of an
+advertisement, including text, images, video, product descriptions and social posts. The difficult part is no longer just
+producing the content; it is proving that the content is accurate, consistent with the brand, properly disclosed and
+supported by evidence.
+For consumers, the same issue appears from the opposite direction. A shopper can see a polished advertisement
+containing a numerical claim, comparison, guarantee, testimonial or product image, but may have no convenient way to
+check what the advertisement is actually supported by. This becomes more important as consumers also use generative
+AI to research and compare products.
+Core problem: There is a growing gap between the speed and volume of AI-assisted marketing and the
+ability to verify the claims and representations reaching consumers.
+2. Why This Problem Matters Now - Research Evidence
+The figures below are deliberately labeled with their study population and date. They should be read as evidence of a trend or documented industry
+experience, not as universal percentages for every marketer, advertisement or consumer.
+ 70%
+ of 125 surveyed U.S. advertising executives reported at least one
+ AI-related advertising incident in IAB's 2025 study. [1]
+ 40%
+ of those surveyed said AI-related issues had caused them to pause
+ or pull ads. [1]
+ 83%
+of 104 surveyed U.S. advertising executives said their company had
+ deployed AI in the creative process in IAB's 2026 study. [2]
+ 71%
+of 505 surveyed U.S. Gen Z/Millennial consumers believed they had
+ seen an AI-created ad. [2]
+ 73%
+ of surveyed Gen Z/Millennial consumers said knowing an ad was
+created with AI would increase or not change purchase likelihood.
+ [2]
+ 67%
+of Indians in Ipsos' 2025 survey expected products/services using AI
+ to disclose its use. [6]
+ 35%
+ growth in shopping-related GenAI use from February to November
+ 2025 reported by BCG. [4]
+ >60%
+ of surveyed consumers in BCG's study expressed high trust in
+ GenAI results. [4]
+
+
+=== PAGE 3 ===
+AD-EVIDENCE - AI Advertising Trust Layer | Samartha Stage 0
+Page 3
+What the Statistics Mean
+70% incidents: IAB surveyed 125 U.S. advertising executives in July 2024. More than 70% reported at least one
+AI-related advertising incident, including hallucinations, bias, inappropriate/off-brand outputs or compliance issues. This
+does not mean 70% of all ads are misleading. [1]
+40% paused/pulled ads: In the same study, 40% said AI-related incidents led them to pause or pull advertisements. This
+shows operational consequences for the surveyed organizations. [1]
+83% creative-process adoption: IAB's 2026 study used 104 U.S. ad-industry executives and found 83% said their
+company had deployed AI in the creative process, up from 60% in the 2024 comparison study. [2]
+71% believed they had seen an AI ad: This came from the 505 Gen Z/Millennial U.S. consumers in the same IAB study.
+It is a perception/exposure measure, not proof that 71% of all consumers encounter AI ads. [2]
+73% disclosure effect: In the same sample, 73% said knowing an ad was created with AI would either increase or not
+change purchase likelihood. This supports exploring transparent verification rather than assuming that AI disclosure
+always reduces trust. [2]
+67% in India: Ipsos surveyed 23,000 people across 30 countries, including India, and reported that 67% of Indians
+expected products/services using AI to disclose that use. [6]
+Implications for AD-EVIDENCE
+The data points to two connected needs. On the brand side, teams need governance that can scale with AI-assisted
+content production. On the consumer side, shoppers need transparent ways to inspect product claims as AI-generated
+advertising becomes more common and AI itself becomes part of the shopping journey.
+The opportunity is therefore not to build another AI writer. It is to create a trust layer between advertising
+claims and the evidence supporting them.
+This framing also prevents a common mistake: treating "AI-generated" as synonymous with "false." A human-created ad
+can contain a misleading claim, and an AI-created ad can contain an accurate claim. AD-EVIDENCE should therefore treat
+AI provenance as one signal within a broader evidence-based verification process.
+
+
+=== PAGE 4 ===
+AD-EVIDENCE - AI Advertising Trust Layer | Samartha Stage 0
+Page 4
+3. Proposed Solution
+AD-EVIDENCE is a specialized AI advertising trust layer that connects marketing claims to evidence. It is designed to
+answer two related questions:
+For brands: "Can we publish this marketing content confidently, or are there claims/representations that need
+review?"
+For consumers: "What exactly is this advertisement claiming, what evidence supports those claims, and what
+remains uncertain?"
+The product should not return a single unexplained "truth score." Instead, it should produce an explainable,
+claim-by-claim verification report. The system should clearly distinguish between supported claims, contradictions and
+cases where there is not enough evidence.
+4. Core Product Flow
+ Step
+Component
+What it does
+1
+Advertisement input
+Text, screenshot, image, video transcript or ad URL.
+2
+Claim extraction
+Identify numerical, comparative, guarantee, testimonial, product-feature and price claims.
+3
+Product/brand identification
+Connect the advertisement to the correct product and brand evidence set.
+4
+Evidence retrieval
+Find official product facts, approved claims, documentation, certifications or other trusted
+evidence.
+5
+Claim-to-evidence comparison
+Detect contradictions, unsupported strengthening, missing qualifiers and other conflicts.
+6
+Brand + disclosure checks
+Compare with brand rules and identify possible AI-transparency/disclosure review points.
+7
+Explainable result
+Show what was checked, evidence found, uncertainty and what should be reviewed by a
+human.
+5. Brand-Side Features
+ Feature
+Value to marketing team
+Brand Knowledge Base
+Store product specifications, approved claims, prohibited claims, tone-of-voice rules, disclaimers
+and other brand policies.
+Claim Verification
+Compare each marketing claim with available evidence and classify it as supported, contradicted or
+not sufficiently evidenced.
+Evidence Trace
+Show the source document, record or approved product fact that supports the result.
+Brand Integrity Check
+Detect off-brand language, prohibited wording, exaggerated tone and conflicts with internal rules.
+AI Disclosure Check
+Identify when AI-generated or AI-edited content may need disclosure review under a selected
+policy/ruleset.
+Risk Prioritization
+Put serious evidence conflicts ahead of lower-risk wording/style issues.
+Human Review Queue
+Route uncertain or consequential findings to a marketer/legal/compliance reviewer instead of
+claiming automatic legal certification.
+Audit Trail
+Maintain versions of the content, evidence, ruleset and review decision.
+
+
+=== PAGE 5 ===
+AD-EVIDENCE - AI Advertising Trust Layer | Samartha Stage 0
+Page 5
+6. Consumer-Side Features
+ Consumer feature
+Purpose
+Verify an Ad
+Submit a screenshot, image, video, text, or ad URL.
+Claim-by-Claim Report
+See exactly what the advertisement claims instead of receiving only a generic trust score.
+Evidence View
+Open the source or product record supporting or contradicting a claim.
+Product Representation Check
+Compare advertised product details or visible features with the available official product information.
+AI-Assistance Indicator
+Surface signals about AI-generated/edited material without equating AI use with deception.
+Disclosure Indicator
+Show when AI-disclosure review may be relevant under the selected policy/ruleset.
+Compare Ads
+Compare competing advertisements by claims, evidence and uncertainty.
+Plain-Language Explanation
+Explain the result in consumer-friendly language: Supported, Contradicted, or Not Enough
+Evidence.
+7. Example Consumer Verification Report
+ Advertisement claim
+Evidence found
+Result
+"Guaranteed 40-hour battery life"
+Official product record: "up to 40 hours"
+CONTRADICTION
+The ad strengthens the approved wording.
+"Industry-leading ANC"
+No defined benchmark or approved evidence
+found
+NEEDS EVIDENCE
+Comparative/superlative claim requires
+review.
+AI-generated product visual
+AI involvement/synthetic signal detected
+TRANSPARENCY CHECK
+AI use is a signal, not a deception verdict.
+The important design choice is that the system explains why it flagged something. A consumer should be able to
+inspect the evidence rather than being asked to trust another opaque AI score.
+8. Why Not Just Upload the Product Document to GPT or Gemini?
+That is a valid challenge, and it exposes the main weakness of a generic version of this idea. If AD-EVIDENCE only sends
+a PDF and an advertisement to a foundation model and asks "Is this trustworthy?", then there is little unique value.
+The proposed differentiation is to make AD-EVIDENCE a specialized evidence and workflow layer rather than a chat
+interface:
+General AI chat
+AD-EVIDENCE
+May give a fluent judgment
+Produces structured claim-by-claim findings.
+Evidence may be temporary/context-dependent
+Maintains a product/brand evidence record and version history.
+Can hallucinate an answer about the product
+Requires evidence retrieval and explicitly exposes missing
+evidence.
+No standardized audit trail
+Records content version, evidence, ruleset and review action.
+AI use treated as the main question
+AI provenance/disclosure is one dimension inside a broader
+claim/evidence analysis.
+General purpose
+Purpose-built for advertising claims, product facts, brand rules and
+consumer explanation.
+Usually one user in one chat
+Two-sided ecosystem: brand pre-publication + consumer
+post-exposure verification.
+9. What Makes the Project Unique?
+ Shared evidence layer: brand teams and consumers can use the same underlying product/claim evidence structure.
+ Claim-level provenance: every material claim can be mapped to supporting, conflicting or missing evidence.
+
+
+=== PAGE 6 ===
+AD-EVIDENCE - AI Advertising Trust Layer | Samartha Stage 0
+Page 6
+ Two-sided trust model: validate before publication and verify after exposure.
+ Evidence over confidence: the product is designed to show sources and uncertainty instead of creating an unsupported
+percentage score.
+ Model-agnostic: GPT, Gemini, Claude or other models can be components; the specialized verification workflow
+remains the product.
+ Human-in-the-loop: consequential legal/compliance decisions are not presented as automatically certified by AI.
+
+
+=== PAGE 7 ===
+AD-EVIDENCE - AI Advertising Trust Layer | Samartha Stage 0
+Page 7
+10. Existing Market Solutions - and the Gap We Need to Own
+The idea is not an empty category. Adobe GenStudio already provides brand governance, brand rules, compliance
+validation and approval workflows. Persado provides AI-assisted marketing compliance and audit trails. Therefore we
+should not claim that nobody is solving advertising governance.
+Our proposed gap is narrower: a shared claim/evidence verification layer that deliberately serves both sides of the
+market and explains the evidence behind every finding. For Stage 0, this should be presented as a focused product
+hypothesis that we want to validate, not as a claim that all competitors lack these capabilities.
+Existing ecosystem
+What it demonstrates
+Adobe GenStudio
+Enterprise content supply chain with brand governance, compliance validation, approved assets and
+review workflows. [8]
+Persado Comply
+Marketing compliance capabilities with regulation-aware AI agents, missing-disclosure detection and
+audit trails. [9]
+IAB frameworks
+Industry guidance for risk-based and materiality-driven AI transparency/disclosure in advertising. [3][7]
+Google Ads
+Supports AI-content labeling and notes that its label setting does not itself guarantee legal compliance.
+[5]
+11. Why the Consumer Side Is Important
+The consumer side makes the concept more than an internal compliance dashboard. BCG's January 2026 research
+reported that shopping-related GenAI use grew 35% between February and November 2025 and that more than 60% of
+surveyed consumers expressed high trust in GenAI results. BCG also reports that GenAI can be highly influential in
+purchase journeys, which makes trustworthy product information increasingly important at the moment of decision. [4]
+The consumer experience should therefore focus on verification, not persuasion. It should not tell a shopper which
+product to buy. It should show what each advertisement claims, what evidence supports those claims, what conflicts exist
+and what remains uncertain, so the consumer can make the decision themselves.
+12. Regulatory and Industry Context
+India has an established consumer-protection framework that includes the 2022 Guidelines for Prevention of Misleading
+Advertisements and Endorsements. [7] This does not mean our system can automatically determine legal compliance; it
+does mean there is a real policy context around misleading advertising.
+IAB published Version 2 of its AI Transparency & Disclosure Framework on August 18, 2026. The framework uses a
+risk-based, materiality-driven approach and addresses AI-generated and AI-assisted text, imagery, video, audio, synthetic
+voices, digital twins and AI-powered consumer interactions. [3]
+Google's July 2026 policy update says certain AI-generated or AI-edited advertising assets may need disclosures/labels
+under emerging rules affecting India and explicitly warns that its labeling feature does not guarantee legal compliance. [5]
+This supports an important product principle: AD-EVIDENCE should flag potential issues for human review, not promise
+universal legal certification.
+
+
+=== PAGE 8 ===
+AD-EVIDENCE - AI Advertising Trust Layer | Samartha Stage 0
+Page 8
+13. Recommended Stage 0 Problem Statement
+Problem: Generative AI is enabling brands to create marketing content at unprecedented speed and scale, but the ability
+to verify product claims, preserve brand integrity and handle AI transparency has not automatically scaled with content
+production. Industry research shows that AI-related advertising incidents are already occurring, while governance and
+disclosure practices are still evolving. At the consumer end, shoppers are increasingly encountering AI-assisted marketing
+and using AI during product research, yet they lack a simple, evidence-based way to inspect the claims made by
+advertisements. [1][2][3][4][6]
+Proposed solution: AD-EVIDENCE - The AI Advertising Trust Layer - is an evidence-grounded verification system that
+extracts material claims from advertising, connects those claims to authoritative or brand-approved evidence, detects
+contradictions and rule conflicts, identifies potential transparency/disclosure issues, and produces an explainable report.
+The same trust layer can support marketing teams before publication and consumers after encountering an advertisement.
+14. Product Vision
+The long-term vision is not simply "an ad checker." It is a trust layer for AI-mediated commerce:
+Brand
+Create marketing content
+AD-EVIDENCE validates claims + brand rules + transparency
+Consumer
+Encounter advertisement
+AD-EVIDENCE explains claims + evidence + uncertainty
+Future
+AI shopping assistant gives product
+recommendation
+AD-EVIDENCE can verify product claims and representations against
+evidence
+15. Boundaries - What We Should Not Claim
+ Do not claim that AI-generated advertising is inherently misleading.
+ Do not claim that a model can guarantee legal compliance across jurisdictions.
+ Do not present a generated "trust score" as objective truth without evidence.
+ Do not treat social/media signals as representative of all consumers.
+ Do not claim that AD-EVIDENCE is the first or only product in advertising governance; existing enterprise tools already
+address parts of this space.
+16. Research Sources
+[1] IAB, "AI Adoption Is Surging in Advertising, but is the Industry Prepared for Responsible AI?" Aug. 21, 2025. Survey: 125 U.S. ad-industry executives; survey
+conducted July 2024. https://www.iab.com/insights/ai-adoption-is-surging-in-advertising-but-is-the-industry-prepared-for-responsible-ai/
+[2] IAB, "The AI Ad Gap Widens." Jan. 15, 2026. Survey: 505 U.S. Gen Z/Millennial consumers and 104 U.S. ad-industry executives; conducted Oct. 2025-Jan. 2026.
+https://www.iab.com/insights/the-ai-gap-widens/
+[3] IAB, "AI Transparency & Disclosure Framework V2." Aug. 18, 2026. https://www.iab.com/guidelines/ai-transparency-disclosure-framework-v2/
+[4] BCG, "Consumers Trust AI to Buy Better. Brands Need to Move Quickly." Jan. 2, 2026.
+https://www.bcg.com/publications/2026/consumers-trust-ai-to-buy-better-brands-must-adapt
+[5] Google Ads Advertising Policies Help, "Updates to AI labeling requirements (July 2026)." Posted July 9, 2026.
+https://support.google.com/adspolicy/answer/17257106
+[6] Ipsos, "Trust and transparency emerge key cornerstones of AI usage among Indians: Ipsos AI Monitor 2025." June 19, 2025. Survey of 23,000 people across 30
+countries. https://www.ipsos.com/en-in/trust-and-transparency-emerge-key-cornerstones-ai-usage-among-indians-ipsos-ai-monitor-2025
+[7] Government of India, Department of Consumer Affairs, "Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements,
+2022." https://consumeraffairs.nic.in/latestnews/guidelines-prevention-misleading-advertisements-and-endorsements-misleading
+[8] Adobe GenStudio, Brand Compliance / Governance. https://business.adobe.com/products/genstudio/performance-marketing/brand-compliance.html
+[9] Persado, Marketing Compliance / Comply. https://www.persado.com/product/capabilities/comply/
+Data note: The statistics in this document are sourced from dated reports/surveys available as of September 2026. "Real-time statistical data" would require live
+instrumentation or a live market-data feed; these figures should therefore be described as latest published statistics, not live real-time numbers.
+Project-name note: AD-EVIDENCE is a working project title for the hackathon concept. Before public launch, conduct a name, domain and trademark availability check.
+
+
