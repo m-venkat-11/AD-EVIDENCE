@@ -46,6 +46,14 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
   const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
 
+  const recentEvidence = claims.flatMap(c => 
+    c.sources.map(s => ({
+      ...s,
+      claimWording: c.advertisedWording,
+      productName: c.productName
+    }))
+  ).slice(0, 5);
+
   return (
     <div className="overview-container">
       {/* Top Greeting & Action Header */}
@@ -70,6 +78,25 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
         </div>
       </div>
 
+      {/* Zero State Onboarding Hero if no claims exist */}
+      {totalClaims === 0 && (
+        <div className="card" style={{ padding: '36px', textAlign: 'center', margin: '16px 0 24px', border: '1px solid rgba(0, 229, 255, 0.3)', background: 'radial-gradient(ellipse at top, rgba(0, 229, 255, 0.08), transparent 70%)' }}>
+          <ShieldCheck size={48} color="#00E5FF" style={{ margin: '0 auto 16px' }} />
+          <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#F5F7FF', marginBottom: '8px' }}>
+            Ready to Verify Your Advertisement
+          </h2>
+          <p style={{ fontSize: '0.92rem', color: '#AEB6C2', maxWidth: '650px', margin: '0 auto 20px', lineHeight: 1.6 }}>
+            Paste or upload any ad copy, image, or URL. AD-EVIDENCE will extract atomic claims, gather multi-tier evidence (official specifications, retailer listings, lab tests), and dynamically populate the entire dashboard, claim passports, knowledge graph, and compliance reports.
+          </p>
+          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+            <button className="btn btn-primary" onClick={onVerifyNew} style={{ padding: '10px 22px', fontSize: '0.92rem' }}>
+              <Plus size={16} />
+              <span>Verify An Advertisement Now</span>
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Statistics Cards - Section 6 Standard */}
       <div className="stats-kpi-grid">
         {/* KPI 1: Claims Monitored */}
@@ -83,7 +110,7 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
           <div className="kpi-number-row">
             <span className="kpi-main-number">{totalClaims}</span>
             <span className="kpi-trend trend-up">
-              <TrendingUp size={13} /> Active tracking
+              <TrendingUp size={13} /> {totalClaims > 0 ? 'Active tracking' : 'Standby'}
             </span>
           </div>
           <p className="kpi-explanation">
@@ -166,34 +193,40 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
           </div>
 
           <div className="timeline-activity-feed">
-            {timelineEvents.map((event) => (
-              <div key={event.id} className="activity-item">
-                <div className="activity-left-col">
-                  <div className={`activity-bullet-dot ${event.eventType.toLowerCase()}`}></div>
-                  <div className="activity-line"></div>
-                </div>
-
-                <div className="activity-body">
-                  <div className="activity-meta-row">
-                    <span className="activity-title-bold">{event.title}</span>
-                    <span className="activity-date mono">{event.date}</span>
-                  </div>
-
-                  <p className="activity-description">{event.description}</p>
-
-                  <div className="activity-footer-row">
-                    <span className="activity-claim-id mono">{event.claimId}</span>
-                    <button 
-                      className="activity-inspect-btn"
-                      onClick={() => onSelectClaim(event.claimId)}
-                    >
-                      <span>View Claim Passport</span>
-                      <ChevronRight size={13} />
-                    </button>
-                  </div>
-                </div>
+            {timelineEvents.length === 0 ? (
+              <div style={{ padding: '36px 16px', textAlign: 'center', color: '#AEB6C2', fontSize: '0.88rem' }}>
+                No claim activity recorded yet. Verify an advertisement to generate audit trail.
               </div>
-            ))}
+            ) : (
+              timelineEvents.map((event) => (
+                <div key={event.id} className="activity-item">
+                  <div className="activity-left-col">
+                    <div className={`activity-bullet-dot ${event.eventType.toLowerCase()}`}></div>
+                    <div className="activity-line"></div>
+                  </div>
+
+                  <div className="activity-body">
+                    <div className="activity-meta-row">
+                      <span className="activity-title-bold">{event.title}</span>
+                      <span className="activity-date mono">{event.date}</span>
+                    </div>
+
+                    <p className="activity-description">{event.description}</p>
+
+                    <div className="activity-footer-row">
+                      <span className="activity-claim-id mono">{event.claimId}</span>
+                      <button 
+                        className="activity-inspect-btn"
+                        onClick={() => onSelectClaim(event.claimId)}
+                      >
+                        <span>View Claim Passport</span>
+                        <ChevronRight size={13} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
 
@@ -206,34 +239,40 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
                 <h3 className="section-title">Priority Reviews</h3>
                 <p className="section-subtitle">Flagged claims requiring compliance or legal resolution.</p>
               </div>
-              <span className="badge-count-red">2 High Severity</span>
+              <span className="badge-count-red">{conflictsDetected} Flagged</span>
             </div>
 
             <div className="priority-items-stack">
-              {claims.filter(c => c.status === 'CONTRADICTED').map((claim) => (
-                <div 
-                  key={claim.id} 
-                  className="priority-review-item"
-                  onClick={() => onSelectClaim(claim.id)}
-                >
-                  <div className="priority-item-top">
-                    <span className="priority-claim-type">{claim.claimType.replace('_', ' ').toUpperCase()}</span>
-                    <span className="status-pill CONTRADICTED">Conflict Detected</span>
-                  </div>
-
-                  <div className="priority-claim-wording">“{claim.advertisedWording}”</div>
-                  <div className="priority-product-name">{claim.productName}</div>
-
-                  <div className="priority-conflict-summary">
-                    <span className="text-secondary">2 conflicting sources identified (Official vs Ad Copy)</span>
-                  </div>
-
-                  <div className="priority-action-link">
-                    <span>Inspect Evidence Breakdown</span>
-                    <ArrowUpRight size={14} />
-                  </div>
+              {claims.filter(c => c.status === 'CONTRADICTED').length === 0 ? (
+                <div style={{ padding: '24px 16px', textAlign: 'center', color: '#AEB6C2', fontSize: '0.85rem' }}>
+                  {totalClaims === 0 ? 'No claims monitored yet.' : 'No direct conflicts detected across verified claims.'}
                 </div>
-              ))}
+              ) : (
+                claims.filter(c => c.status === 'CONTRADICTED').map((claim) => (
+                  <div 
+                    key={claim.id} 
+                    className="priority-review-item"
+                    onClick={() => onSelectClaim(claim.id)}
+                  >
+                    <div className="priority-item-top">
+                      <span className="priority-claim-type">{claim.claimType.replace('_', ' ').toUpperCase()}</span>
+                      <span className="status-pill CONTRADICTED">Conflict Detected</span>
+                    </div>
+
+                    <div className="priority-claim-wording">“{claim.advertisedWording}”</div>
+                    <div className="priority-product-name">{claim.productName}</div>
+
+                    <div className="priority-conflict-summary">
+                      <span className="text-secondary">{claim.conflicts.length || 1} conflicting sources identified (Official vs Ad Copy)</span>
+                    </div>
+
+                    <div className="priority-action-link">
+                      <span>Inspect Evidence Breakdown</span>
+                      <ArrowUpRight size={14} />
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
 
@@ -247,32 +286,24 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
             </div>
 
             <div className="recent-evidence-list">
-              <div className="evidence-snippet-item">
-                <div className="snippet-type-row">
-                  <span className="snippet-type official">OFFICIAL SPECIFICATION</span>
-                  <span className="snippet-date">28 Sep 2026</span>
+              {recentEvidence.length === 0 ? (
+                <div style={{ padding: '24px 16px', textAlign: 'center', color: '#AEB6C2', fontSize: '0.85rem' }}>
+                  No evidence sources ingested yet.
                 </div>
-                <div className="snippet-title">Sony WH-1000XM5 User Manual (WH-1000XM5, p.18)</div>
-                <div className="snippet-quote">“Up to 40 hours with ANC Off at 50% volume (AAC codec).”</div>
-              </div>
-
-              <div className="evidence-snippet-item">
-                <div className="snippet-type-row">
-                  <span className="snippet-type lab">INDEPENDENT TEST</span>
-                  <span className="snippet-date">14 Sep 2026</span>
-                </div>
-                <div className="snippet-title">AcousticLab Runtime Evaluation Report #TAL-2026</div>
-                <div className="snippet-quote">“38.4 hours measured under IEC 60268 continuous pink noise output.”</div>
-              </div>
-
-              <div className="evidence-snippet-item">
-                <div className="snippet-type-row">
-                  <span className="snippet-type retailer">RETAILER LISTING</span>
-                  <span className="snippet-date">03 Aug 2026</span>
-                </div>
-                <div className="snippet-title">Amazon ASIN B0C8XYZ950 Product Bullets</div>
-                <div className="snippet-quote">“40 hours battery backup. Fast charging enabled.”</div>
-              </div>
+              ) : (
+                recentEvidence.map((snippet, idx) => (
+                  <div key={idx} className="evidence-snippet-item">
+                    <div className="snippet-type-row">
+                      <span className={`snippet-type ${snippet.sourceType.toLowerCase()}`}>
+                        {snippet.sourceType.replace('_', ' ')}
+                      </span>
+                      <span className="snippet-date">{snippet.retrievedDate || 'Recent'}</span>
+                    </div>
+                    <div className="snippet-title">{snippet.sourceName}</div>
+                    <div className="snippet-quote">“{snippet.observedValue}”</div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>
@@ -280,3 +311,4 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
     </div>
   );
 };
+

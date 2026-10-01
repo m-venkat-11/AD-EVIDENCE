@@ -16,22 +16,118 @@ import {
   Megaphone,
   UserCheck
 } from 'lucide-react';
-import { GRAPH_NODES, GRAPH_EDGES } from '../data/mockData';
-import type { GraphNode, GraphEdge } from '../types';
+import type { GraphNode, GraphEdge, ClaimPassport, Product } from '../types';
 
 interface ClaimEvidenceGraphViewProps {
+  claims: ClaimPassport[];
+  product?: Product;
   onSelectClaim: (claimId: string) => void;
 }
 
 export const ClaimEvidenceGraphView: React.FC<ClaimEvidenceGraphViewProps> = ({
+  claims,
+  product,
   onSelectClaim
 }) => {
   const [activeFilter, setActiveFilter] = useState<string>('all');
-  const [selectedNode, setSelectedNode] = useState<GraphNode | null>(GRAPH_NODES[2]); // Default to claim node
   const [zoomLevel, setZoomLevel] = useState<number>(1);
 
+  // Dynamically compute nodes and edges from claims and product
+  const { nodes: dynamicNodes, edges: dynamicEdges } = React.useMemo(() => {
+    if (!claims || claims.length === 0) {
+      return { nodes: [], edges: [] };
+    }
+
+    const brandName = product?.brandName || claims[0]?.brandName || 'Brand';
+    const productName = product?.productName || claims[0]?.productName || 'Audited Product';
+
+    const nodesList: GraphNode[] = [
+      {
+        id: 'brand-main',
+        label: brandName,
+        subLabel: 'Manufacturer / Brand',
+        type: 'brand',
+        color: '#00E5FF',
+        val: 26
+      },
+      {
+        id: 'prod-main',
+        label: productName.length > 28 ? productName.slice(0, 26) + '...' : productName,
+        subLabel: product?.modelNumber || 'Product Entity',
+        type: 'product',
+        color: '#3D5AFE',
+        val: 28
+      }
+    ];
+
+    const edgesList: GraphEdge[] = [
+      {
+        id: 'edge-brand-prod',
+        source: 'brand-main',
+        target: 'prod-main',
+        label: 'Manufactures',
+        status: 'normal'
+      }
+    ];
+
+    claims.slice(0, 6).forEach((claim) => {
+      nodesList.push({
+        id: claim.id,
+        label: claim.advertisedWording.length > 28 ? claim.advertisedWording.slice(0, 26) + '...' : claim.advertisedWording,
+        subLabel: `${claim.id} • ${claim.status}`,
+        type: 'claim',
+        color: claim.status === 'CONTRADICTED' ? '#FF2FA3' : claim.status === 'SUPPORTED' ? '#00FF87' : '#FF8A1E',
+        status: claim.status,
+        val: 22
+      });
+
+      edgesList.push({
+        id: `edge-prod-${claim.id}`,
+        source: 'prod-main',
+        target: claim.id,
+        label: 'Asserts Claim',
+        status: claim.status === 'CONTRADICTED' ? 'conflict' : 'normal'
+      });
+
+      claim.sources.slice(0, 2).forEach((src, sIdx) => {
+        const srcId = `src-${claim.id}-${sIdx}`;
+        const isConflict = src.conflictFlag || claim.status === 'CONTRADICTED';
+        nodesList.push({
+          id: srcId,
+          label: src.sourceName.length > 26 ? src.sourceName.slice(0, 24) + '...' : src.sourceName,
+          subLabel: `${src.observedValue} (${src.sourceType})`,
+          type: src.sourceType === 'OFFICIAL_BRAND' ? 'official' : src.sourceType === 'INDEPENDENT_LAB' ? 'lab' : 'retailer',
+          color: isConflict ? '#FF2FA3' : '#00E5FF',
+          val: 16
+        });
+
+        edgesList.push({
+          id: `edge-${claim.id}-${srcId}`,
+          source: claim.id,
+          target: srcId,
+          label: isConflict ? 'Contradicts' : 'Evidence Grounding',
+          status: isConflict ? 'conflict' : 'normal'
+        });
+      });
+    });
+
+    return { nodes: nodesList, edges: edgesList };
+  }, [claims, product]);
+
+  const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
+
+  React.useEffect(() => {
+    if (dynamicNodes.length > 2) {
+      setSelectedNode(dynamicNodes[2]); // Default to first claim node
+    } else if (dynamicNodes.length > 0) {
+      setSelectedNode(dynamicNodes[0]);
+    } else {
+      setSelectedNode(null);
+    }
+  }, [dynamicNodes]);
+
   // Filter nodes
-  const filteredNodes = GRAPH_NODES.filter((node) => {
+  const filteredNodes = dynamicNodes.filter((node) => {
     if (activeFilter === 'all') return true;
     if (activeFilter === 'claims') return node.type === 'claim';
     if (activeFilter === 'evidence') return ['official', 'lab', 'provenance'].includes(node.type);
@@ -42,35 +138,37 @@ export const ClaimEvidenceGraphView: React.FC<ClaimEvidenceGraphViewProps> = ({
     return true;
   });
 
-  // Calculate coordinates for graph nodes on canvas (900x560)
+  // Calculate coordinates for graph nodes on canvas (920x600)
   const getNodeCoordinates = (nodeId: string, index: number, total: number) => {
-    const layoutMap: Record<string, { x: number; y: number }> = {
-      'brand-soundcore': { x: 130, y: 130 },
-      'prod-xyz-headset-pro': { x: 320, y: 150 },
-      'CLM-82917': { x: 500, y: 240 },
-      'ad-instagram-01': { x: 260, y: 340 },
-      'ad-youtube-02': { x: 230, y: 440 },
-      'ad-retailer-03': { x: 420, y: 450 },
-      'src-official-xyz': { x: 740, y: 130 },
-      'src-lab-xyz': { x: 770, y: 250 },
-      'src-consumer-xyz': { x: 730, y: 380 },
-      'src-provenance-xyz': { x: 120, y: 370 },
+    if (nodeId === 'brand-main') return { x: 90, y: 300 };
+    if (nodeId === 'prod-main') return { x: 270, y: 300 };
 
-      // VoltDrive Cluster
-      'prod-voltdrive-scooter': { x: 340, y: 550 },
-      'CLM-90312': { x: 560, y: 550 },
-      'src-official-price': { x: 770, y: 520 },
-      'src-consumer-voltdrive': { x: 620, y: 640 },
-    };
-
-    if (layoutMap[nodeId]) {
-      return layoutMap[nodeId];
+    // Claims column at x = 510
+    const claimNodes = dynamicNodes.filter(n => n.type === 'claim');
+    const claimIndex = claimNodes.findIndex(n => n.id === nodeId);
+    if (claimIndex !== -1) {
+      const spacing = Math.min(85, 480 / (claimNodes.length || 1));
+      return {
+        x: 510,
+        y: 120 + claimIndex * spacing
+      };
     }
 
-    const angle = (index / total) * 2 * Math.PI;
+    // Sources column at x = 750
+    const srcNodes = dynamicNodes.filter(n => ['official', 'lab', 'retailer', 'consumer'].includes(n.type));
+    const srcIndex = srcNodes.findIndex(n => n.id === nodeId);
+    if (srcIndex !== -1) {
+      const spacing = Math.min(65, 500 / (srcNodes.length || 1));
+      return {
+        x: 750,
+        y: 80 + srcIndex * spacing
+      };
+    }
+
+    const angle = (index / (total || 1)) * 2 * Math.PI;
     return {
-      x: 450 + 260 * Math.cos(angle),
-      y: 280 + 180 * Math.sin(angle)
+      x: 460 + 240 * Math.cos(angle),
+      y: 300 + 170 * Math.sin(angle)
     };
   };
 
@@ -190,15 +288,27 @@ export const ClaimEvidenceGraphView: React.FC<ClaimEvidenceGraphViewProps> = ({
             {/* Grid overlay */}
             <rect width="100%" height="100%" fill="url(#graph-grid)" />
 
+            {/* Zero State if no nodes exist */}
+            {dynamicNodes.length === 0 && (
+              <g>
+                <text x="460" y="280" textAnchor="middle" fill="#F5F7FF" fontSize="16" fontWeight="700">
+                  No Active Graph Data
+                </text>
+                <text x="460" y="310" textAnchor="middle" fill="#AEB6C2" fontSize="13">
+                  Verify an advertisement in the Verification Studio to generate an interactive Claim-Evidence graph.
+                </text>
+              </g>
+            )}
+
             {/* Edge Connections */}
             <g className="edges-layer">
-              {GRAPH_EDGES.map((edge) => {
-                const srcNode = GRAPH_NODES.find(n => n.id === edge.source);
-                const tgtNode = GRAPH_NODES.find(n => n.id === edge.target);
+              {dynamicEdges.map((edge) => {
+                const srcNode = dynamicNodes.find(n => n.id === edge.source);
+                const tgtNode = dynamicNodes.find(n => n.id === edge.target);
                 if (!srcNode || !tgtNode) return null;
 
-                const p1 = getNodeCoordinates(edge.source, 0, GRAPH_NODES.length);
-                const p2 = getNodeCoordinates(edge.target, 0, GRAPH_NODES.length);
+                const p1 = getNodeCoordinates(edge.source, 0, dynamicNodes.length);
+                const p2 = getNodeCoordinates(edge.target, 0, dynamicNodes.length);
 
                 const isConf = edge.status === 'conflict';
                 const midX = (p1.x + p2.x) / 2;
@@ -368,7 +478,7 @@ export const ClaimEvidenceGraphView: React.FC<ClaimEvidenceGraphViewProps> = ({
                 <div className="meta-row">
                   <span className="meta-key">Relationships:</span>
                   <div className="meta-val edges-list">
-                    {GRAPH_EDGES.filter(e => e.source === selectedNode.id || e.target === selectedNode.id).map(e => (
+                    {dynamicEdges.filter(e => e.source === selectedNode.id || e.target === selectedNode.id).map(e => (
                       <div key={e.id} className="edge-chip">
                         <span className="edge-name">{e.label}</span>
                         <span className="edge-dest mono">{e.source} ➔ {e.target}</span>

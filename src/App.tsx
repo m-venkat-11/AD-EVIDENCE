@@ -49,15 +49,64 @@ export function App() {
   const [appMode, setAppMode] = useState<'enterprise' | 'consumer' | 'landing'>('enterprise');
   const [currentNav, setCurrentNav] = useState<NavItem>('overview');
 
-  // Active Database State
-  const [claims, setClaims] = useState<ClaimPassport[]>(INITIAL_CLAIM_PASSPORTS);
-  const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
-  const [timelineEvents, setTimelineEvents] = useState<TimelineEvent[]>(INITIAL_TIMELINE_EVENTS);
-  const [notifications, setNotifications] = useState<SystemNotification[]>(INITIAL_NOTIFICATIONS);
+  // Active Database State - Persisted to LocalStorage or started in pristine state
+  const [claims, setClaims] = useState<ClaimPassport[]>(() => {
+    try {
+      const saved = localStorage.getItem('ad_evidence_verified_claims');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch {}
+    return [];
+  });
+
+  const [products, setProducts] = useState<Product[]>(() => {
+    try {
+      const saved = localStorage.getItem('ad_evidence_verified_products');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch {}
+    return [];
+  });
+
+  const [timelineEvents, setTimelineEvents] = useState<TimelineEvent[]>(() => {
+    try {
+      const saved = localStorage.getItem('ad_evidence_verified_events');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch {}
+    return [];
+  });
+
+  const [notifications, setNotifications] = useState<SystemNotification[]>(() => {
+    try {
+      const saved = localStorage.getItem('ad_evidence_verified_notifs');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch {}
+    return [];
+  });
+
   const [consumerObservations, setConsumerObservations] = useState<ConsumerObservation[]>(INITIAL_CONSUMER_OBSERVATIONS);
 
   // Selected Claim
-  const [selectedClaimId, setSelectedClaimId] = useState<string>('CLM-82917');
+  const [selectedClaimId, setSelectedClaimId] = useState<string>(() => {
+    try {
+      const saved = localStorage.getItem('ad_evidence_verified_claims');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed[0]?.id) return parsed[0].id;
+      }
+    } catch {}
+    return '';
+  });
 
   // Search Modal
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -65,9 +114,67 @@ export function App() {
   // Consumer Report Modal
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
-  // Current Claim & Product
-  const activeClaim = claims.find(c => c.id === selectedClaimId) || claims[0];
-  const activeProduct = products.find(p => p.id === activeClaim.productId) || products[0];
+  // Fallback structures when no ad has been verified yet
+  const fallbackClaim: ClaimPassport = {
+    id: 'CLM-EMPTY',
+    productId: 'prod-empty',
+    productName: 'No Advertisement Verified',
+    brandName: 'Brand',
+    attribute: 'commercial_claim',
+    advertisedWording: 'No active claims monitored yet. Verify an advertisement in the studio to generate passports.',
+    normalizedValue: '0',
+    unit: '',
+    claimType: 'performance',
+    conditions: [],
+    status: 'UNDER_REVIEW',
+    statusExplanation: 'Ingest advertising copy to generate empirical verification report.',
+    fourQuestions: {
+      whatClaimed: 'Awaiting content ingestion',
+      whatEvidenceChecked: 'Awaiting evidence lookup',
+      whatEvidenceSaid: 'Awaiting comparison',
+      whyStatusChosen: 'Awaiting analysis'
+    },
+    firstSeenDate: 'Today',
+    lastVerifiedDate: 'Today',
+    freshnessPolicy: 'Dynamic',
+    evidenceCoverage: { productIdentity: false, officialSpec: false, currentPrice: false, independentLab: false, consumerReports: false, c2paProvenance: false },
+    sources: [],
+    conflicts: [],
+    travelOccurrences: [],
+    regulatoryNotes: []
+  };
+
+  const activeClaim: ClaimPassport = claims.find(c => c.id === selectedClaimId) || claims[0] || fallbackClaim;
+  const activeProduct: Product = products.find(p => p.id === activeClaim?.productId) || products[0] || {
+    id: 'prod-empty',
+    brandId: 'brand-empty',
+    brandName: activeClaim.brandName || 'Brand',
+    productName: activeClaim.productName || 'Audited Product',
+    modelNumber: 'V1',
+    gtin: 'GTIN-0000000000000',
+    category: 'General',
+    verifiedByGS1: false,
+    officialDocUrl: 'https://specs.ad-evidence.org',
+    specSummary: 'Awaiting advertisement verification',
+    claimsCount: claims.length,
+    activeConflicts: 0
+  };
+
+  // Reset workspace to verify a brand-new advertisement
+  const handleResetWorkspace = () => {
+    try {
+      localStorage.removeItem('ad_evidence_verified_claims');
+      localStorage.removeItem('ad_evidence_verified_products');
+      localStorage.removeItem('ad_evidence_verified_events');
+      localStorage.removeItem('ad_evidence_verified_notifs');
+    } catch {}
+    setClaims([]);
+    setProducts([]);
+    setTimelineEvents([]);
+    setNotifications([]);
+    setSelectedClaimId('');
+    setCurrentNav('verify');
+  };
 
   // Handler: Selecting a claim to inspect
   const handleSelectClaim = (claimId: string) => {
@@ -238,6 +345,8 @@ export function App() {
           onOpenHelp={() => setCurrentNav('help')}
           theme={theme}
           onToggleTheme={() => setTheme(prev => prev === 'dark' ? 'light' : 'dark')}
+          workspaceName={activeProduct?.productName && activeProduct.productName !== 'No Advertisement Verified' ? `${activeProduct.brandName} Verification Workspace` : 'Global Brand Assurance'}
+          onNewVerification={() => setCurrentNav('verify')}
         />
 
         {/* Dynamic Route Content */}
@@ -264,6 +373,8 @@ export function App() {
 
           {currentNav === 'graph' && (
             <ClaimEvidenceGraphView 
+              claims={claims}
+              product={activeProduct}
               onSelectClaim={handleSelectClaim}
             />
           )}
@@ -272,11 +383,17 @@ export function App() {
             <VerifyContentStudio 
               onAnalyzeComplete={(newClaims, newProduct) => {
                 if (newProduct) {
-                  setProducts(prev => [newProduct, ...prev.filter(p => p.id !== newProduct.id)]);
+                  setProducts([newProduct]);
+                  try {
+                    localStorage.setItem('ad_evidence_verified_products', JSON.stringify([newProduct]));
+                  } catch {}
                 }
                 if (newClaims && newClaims.length > 0) {
-                  setClaims(prev => [...newClaims, ...prev.filter(c => !newClaims.some(nc => nc.id === c.id))]);
+                  setClaims(newClaims);
                   setSelectedClaimId(newClaims[0].id);
+                  try {
+                    localStorage.setItem('ad_evidence_verified_claims', JSON.stringify(newClaims));
+                  } catch {}
 
                   const today = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
                   const newEvents: TimelineEvent[] = newClaims.map((c, i) => ({
@@ -289,16 +406,23 @@ export function App() {
                     eventType: c.status === 'CONTRADICTED' ? 'CONFLICT_DETECTED' : 'OFFICIAL_ADDED',
                     statusAfter: c.status
                   }));
-                  setTimelineEvents(prev => [...newEvents, ...prev]);
+                  setTimelineEvents(newEvents);
+                  try {
+                    localStorage.setItem('ad_evidence_verified_events', JSON.stringify(newEvents));
+                  } catch {}
 
-                  setNotifications(prev => [{
+                  const newNotifs: SystemNotification[] = [{
                     id: `notif-${Date.now()}`,
                     date: today,
                     title: `Verification Complete: ${newProduct?.productName || 'New Advertisement'}`,
-                    message: `Extracted and verified ${newClaims.length} commercial claims.`,
+                    message: `Audited ${newClaims.length} commercial claims.`,
                     severity: newClaims.some(c => c.status === 'CONTRADICTED') ? 'CRITICAL' : 'INFO',
                     read: false
-                  }, ...prev]);
+                  }];
+                  setNotifications(newNotifs);
+                  try {
+                    localStorage.setItem('ad_evidence_verified_notifs', JSON.stringify(newNotifs));
+                  } catch {}
                 }
               }}
               onOpenPassport={(claimId) => {
@@ -325,6 +449,7 @@ export function App() {
           {currentNav === 'timeline' && (
             <TimelineView 
               timelineEvents={timelineEvents}
+              activeClaim={activeClaim}
               onSelectClaim={handleSelectClaim}
             />
           )}

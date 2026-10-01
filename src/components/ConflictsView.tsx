@@ -23,66 +23,53 @@ export const ConflictsView: React.FC<ConflictsViewProps> = ({
 }) => {
   const [filterSeverity, setFilterSeverity] = useState<'ALL' | 'CRITICAL' | 'CONTEXT' | 'OUTDATED'>('ALL');
 
-  // Collect all conflicts across claims
-  const allConflicts = [
-    {
-      id: 'conf-018',
-      claimId: 'CLM-82917',
-      claimWording: '50-hour battery life',
-      productName: 'Sony WH-1000XM5 Wireless Headphones',
-      adValue: '50 hours',
-      officialValue: '40 hours (ANC Off)',
-      independentValue: '38.4 hours',
-      status: 'CONFLICT DETECTED',
-      severity: 'Review Required',
-      severityType: 'CRITICAL',
-      analysis: 'Advertisement asserts a 50-hour guarantee, but official engineering specs rate the battery at up to 40 hours with ANC disabled. Independent tests report 38.4 hours.',
-      actionRecommendation: 'Issue copy update: "Up to 40 hours with ANC off"'
-    },
-    {
-      id: 'conf-007',
-      claimId: 'CLM-82917',
-      claimWording: 'Adaptive Noise Cancellation with 50-hour runtime',
-      productName: 'Sony WH-1000XM5 Wireless Headphones',
-      adValue: '50 hours (ANC implied)',
-      officialValue: '30 hours (ANC On)',
-      independentValue: '28.1 hours',
-      status: 'CONTEXT MISSING',
-      severity: 'Medium Severity',
-      severityType: 'CONTEXT',
-      missingCondition: 'ANC OFF condition omitted from ad copy',
-      analysis: 'Operating runtime drops to 30 hours when ANC is engaged. Omitting the ANC OFF qualifier misleads consumers regarding active noise canceling duration.',
-      actionRecommendation: 'Review advertisement wording and add ANC footnote'
-    },
-    {
-      id: 'conf-022',
-      claimId: 'CLM-41029',
-      claimWording: '100% wrinkle elimination in just 7 days',
-      productName: 'UltraGlow Super C Radiance Serum',
-      adValue: '100% in 7 days',
-      officialValue: '92% in 56 days (8 weeks)',
-      independentValue: 'Hydration confirmed; wrinkles remain',
-      status: 'CONFLICT DETECTED',
-      severity: 'Review Required',
-      severityType: 'CRITICAL',
-      analysis: 'Timeline compressed from 8 weeks to 7 days, and clinical reduction in appearance inflated to absolute 100% elimination.',
-      actionRecommendation: 'Legal clearance required: Align with CTRI registered protocol'
-    },
-    {
-      id: 'conf-025',
-      claimId: 'CLM-90312',
-      claimWording: 'Starting at ₹44,999 with 120km certified range',
-      productName: 'VoltDrive City S-100 Electric Scooter',
-      adValue: '₹44,999 ex-showroom',
-      officialValue: '₹54,999 current showroom price',
-      independentValue: 'N/A (Pricing)',
-      status: 'OUTDATED',
-      severity: 'Price Expired',
-      severityType: 'OUTDATED',
-      analysis: 'Introductory promotional price of ₹44,999 expired on July 31, 2026. The ad continues to circulate with outdated pricing.',
-      actionRecommendation: 'Takedown expired creative and update to ₹54,999'
-    }
-  ];
+  // Collect all conflicts dynamically across claims
+  const allConflicts = React.useMemo(() => {
+    return claims.flatMap((claim) => {
+      if (claim.status === 'SUPPORTED') return [];
+
+      const officialSource = claim.sources.find(s => s.sourceType === 'OFFICIAL_BRAND');
+      const independentSource = claim.sources.find(s => s.sourceType === 'INDEPENDENT_LAB' || s.sourceType === 'CONSUMER_OBSERVATION');
+
+      if (claim.conflicts && claim.conflicts.length > 0) {
+        return claim.conflicts.map((conf, idx) => ({
+          id: `conf-${claim.id}-${idx}`,
+          claimId: claim.id,
+          claimWording: claim.advertisedWording,
+          productName: claim.productName,
+          adValue: conf.valueA || `${claim.normalizedValue} ${claim.unit}`,
+          officialValue: conf.valueB || officialSource?.observedValue || 'Spec discrepancy',
+          independentValue: independentSource?.observedValue || 'Lab benchmark pending',
+          status: claim.status === 'CONTRADICTED' ? 'CONFLICT DETECTED' : claim.status === 'OUTDATED' ? 'OUTDATED' : 'CONTEXT MISSING',
+          severity: claim.status === 'CONTRADICTED' ? 'Review Required' : 'Context Gap',
+          severityType: (claim.status === 'CONTRADICTED' ? 'CRITICAL' : claim.status === 'OUTDATED' ? 'OUTDATED' : 'CONTEXT') as 'CRITICAL' | 'CONTEXT' | 'OUTDATED',
+          missingCondition: conf.missingCondition || (claim.conditions.length > 0 ? claim.conditions.join(', ') : ''),
+          analysis: conf.nature || claim.statusExplanation,
+          actionRecommendation: conf.recommendedAction || 'Update claim copy to match verified manufacturer specifications'
+        }));
+      }
+
+      return [{
+        id: `conf-${claim.id}`,
+        claimId: claim.id,
+        claimWording: claim.advertisedWording,
+        productName: claim.productName,
+        adValue: `${claim.normalizedValue} ${claim.unit}`,
+        officialValue: officialSource?.observedValue || 'Official manual specification',
+        independentValue: independentSource?.observedValue || 'Independent benchmark test',
+        status: claim.status === 'CONTRADICTED' ? 'CONFLICT DETECTED' : claim.status === 'OUTDATED' ? 'OUTDATED' : 'CONTEXT MISSING',
+        severity: claim.status === 'CONTRADICTED' ? 'Review Required' : 'Context Gap',
+        severityType: (claim.status === 'CONTRADICTED' ? 'CRITICAL' : claim.status === 'OUTDATED' ? 'OUTDATED' : 'CONTEXT') as 'CRITICAL' | 'CONTEXT' | 'OUTDATED',
+        missingCondition: claim.conditions.join(', '),
+        analysis: claim.statusExplanation,
+        actionRecommendation: claim.status === 'CONTRADICTED' ? 'Revise creative copy to reflect verified factory ratings' : 'Attach required operational footnote'
+      }];
+    });
+  }, [claims]);
+
+  const criticalCount = allConflicts.filter(c => c.severityType === 'CRITICAL').length;
+  const contextCount = allConflicts.filter(c => c.severityType === 'CONTEXT').length;
+  const outdatedCount = allConflicts.filter(c => c.severityType === 'OUTDATED').length;
 
   const filtered = allConflicts.filter((c) => {
     if (filterSeverity === 'ALL') return true;
@@ -115,25 +102,38 @@ export const ConflictsView: React.FC<ConflictsViewProps> = ({
             className={`filter-btn ${filterSeverity === 'CRITICAL' ? 'active' : ''}`}
             onClick={() => setFilterSeverity('CRITICAL')}
           >
-            Critical Contradictions (2)
+            Critical Contradictions ({criticalCount})
           </button>
           <button 
             className={`filter-btn ${filterSeverity === 'CONTEXT' ? 'active' : ''}`}
             onClick={() => setFilterSeverity('CONTEXT')}
           >
-            Context Missing (1)
+            Context Missing ({contextCount})
           </button>
           <button 
             className={`filter-btn ${filterSeverity === 'OUTDATED' ? 'active' : ''}`}
             onClick={() => setFilterSeverity('OUTDATED')}
           >
-            Outdated Specs / Price (1)
+            Outdated Specs / Price ({outdatedCount})
           </button>
         </div>
       </div>
 
       {/* Conflicts Cards List */}
       <div className="conflicts-stack">
+        {filtered.length === 0 && (
+          <div className="card" style={{ padding: '48px', textAlign: 'center' }}>
+            <FileCheck2 size={42} color="#00FF87" style={{ margin: '0 auto 16px' }} />
+            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#F5F7FF', marginBottom: '8px' }}>
+              {claims.length === 0 ? 'No Claims Monitored' : 'Zero Conflicts Detected'}
+            </h3>
+            <p style={{ fontSize: '0.88rem', color: '#AEB6C2' }}>
+              {claims.length === 0 
+                ? 'Verify an advertisement in the Verification Studio to audit claims for discrepancies.' 
+                : 'All audited assertions are consistent with official specifications and empirical benchmarks.'}
+            </p>
+          </div>
+        )}
         {filtered.map((item) => (
           <div key={item.id} className="conflict-investigation-card card">
             {/* Card Top */}

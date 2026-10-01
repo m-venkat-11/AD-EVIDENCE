@@ -11,15 +11,17 @@ import {
   CheckCircle2,
   SlidersHorizontal
 } from 'lucide-react';
-import type { TimelineEvent } from '../types';
+import type { TimelineEvent, ClaimPassport } from '../types';
 
 interface TimelineViewProps {
   timelineEvents: TimelineEvent[];
+  activeClaim?: ClaimPassport;
   onSelectClaim: (claimId: string) => void;
 }
 
 export const TimelineView: React.FC<TimelineViewProps> = ({
   timelineEvents,
+  activeClaim,
   onSelectClaim
 }) => {
   return (
@@ -35,13 +37,20 @@ export const TimelineView: React.FC<TimelineViewProps> = ({
 
         <div className="timeline-badge-pill">
           <Clock size={16} color="#3D5AFE" />
-          <span>Target Claim: CLM-82917 (50h Battery Life)</span>
+          <span>Target: {activeClaim ? `${activeClaim.id} (${activeClaim.advertisedWording.slice(0, 30)}...)` : 'Audit Trail Feed'}</span>
         </div>
       </div>
 
       {/* Vertical Timeline Card */}
       <div className="timeline-main-card card">
-        <div className="timeline-vertical-stream">
+        {timelineEvents.length === 0 ? (
+          <div style={{ padding: '48px', textAlign: 'center', color: '#AEB6C2' }}>
+            <Clock size={36} color="#3D5AFE" style={{ margin: '0 auto 12px' }} />
+            <h3 style={{ fontSize: '1.1rem', color: '#F5F7FF', marginBottom: '6px' }}>No Claim History Logged</h3>
+            <p style={{ fontSize: '0.85rem' }}>Verify an advertisement to start tracking its evidence lifecycle over time.</p>
+          </div>
+        ) : (
+          <div className="timeline-vertical-stream">
           {timelineEvents.map((evt, idx) => (
             <div key={evt.id} className="timeline-entry-row">
               {/* Left Date Column */}
@@ -94,7 +103,8 @@ export const TimelineView: React.FC<TimelineViewProps> = ({
               </div>
             </div>
           ))}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

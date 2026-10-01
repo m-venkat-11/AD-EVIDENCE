@@ -19,6 +19,8 @@ interface HeaderProps {
   onOpenHelp: () => void;
   theme?: 'dark' | 'light';
   onToggleTheme?: () => void;
+  workspaceName?: string;
+  onNewVerification?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -27,7 +29,9 @@ export const Header: React.FC<HeaderProps> = ({
   onSelectClaim,
   onOpenHelp,
   theme = 'dark',
-  onToggleTheme
+  onToggleTheme,
+  workspaceName = 'Global Brand Assurance',
+  onNewVerification
 }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const unreadCount = notifications.filter(n => !n.read).length;
@@ -36,13 +40,13 @@ export const Header: React.FC<HeaderProps> = ({
     <header className="global-header">
       {/* Left: Workspace Selector */}
       <div className="header-left">
-        <div className="workspace-dropdown-trigger">
+        <div className="workspace-dropdown-trigger" onClick={onNewVerification} style={{ cursor: onNewVerification ? 'pointer' : 'default' }}>
           <div className="workspace-icon">
             <Building2 size={16} color="var(--text-primary)" />
           </div>
           <div className="workspace-info">
-            <span className="workspace-label">Workspace</span>
-            <span className="workspace-name">Global Brand Assurance</span>
+            <span className="workspace-label">Active Workspace</span>
+            <span className="workspace-name">{workspaceName}</span>
           </div>
           <ChevronDown size={14} color="var(--text-secondary)" />
         </div>

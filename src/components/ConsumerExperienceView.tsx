@@ -91,7 +91,7 @@ export const ConsumerExperienceView: React.FC<ConsumerExperienceViewProps> = ({
             <span className="preset-lbl">Try checking:</span>
             <button 
               className="preset-btn"
-              onClick={() => setAdQuery('Sony WH-1000XM5: Guaranteed 50-hour battery life')}
+              onClick={() => setAdQuery('Guaranteed 50-hour battery life on a single charge')}
             >
               "50-hour battery life"
             </button>
@@ -212,7 +212,7 @@ export const ConsumerExperienceView: React.FC<ConsumerExperienceViewProps> = ({
           <div className="obs-form-grid">
             <div className="obs-field-col">
               <label className="obs-label">Claim under review:</label>
-              <input type="text" className="input-text" disabled value="Battery Runtime (Sony WH-1000XM5)" />
+              <input type="text" className="input-text" disabled value={claim ? `${claim.attribute || 'Commercial Claim'} (${claim.productName || 'Verified Product'})` : 'Claim under review'} />
             </div>
 
             <div className="obs-field-col">

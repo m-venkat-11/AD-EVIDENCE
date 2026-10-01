@@ -37,7 +37,9 @@ export const BrandConsoleView: React.FC<BrandConsoleViewProps> = ({
   
   // Pre-publish scanner state
   const [adCopyDraft, setAdCopyDraft] = useState(
-    'Introducing the all-new Sony WH-1000XM5: Experience guaranteed 50-hour nonstop battery life and next-gen AI audio tuning for only ₹26,990!'
+    claim?.advertisedWording 
+      ? `Introducing the all-new ${currentProduct?.productName || 'Product'}: ${claim.advertisedWording} with next-generation performance.`
+      : 'Introducing the all-new flagship model: Experience guaranteed performance and verified specifications.'
   );
   const [scanResult, setScanResult] = useState<{
     riskLevel: 'HIGH' | 'MEDIUM' | 'PASS';
