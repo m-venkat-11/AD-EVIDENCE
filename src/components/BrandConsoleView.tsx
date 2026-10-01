@@ -36,11 +36,7 @@ export const BrandConsoleView: React.FC<BrandConsoleViewProps> = ({
   const [activeTab, setActiveTab] = useState<'prepublish' | 'knowledge' | 'campaigns' | 'dispute'>('prepublish');
   
   // Pre-publish scanner state
-  const [adCopyDraft, setAdCopyDraft] = useState(
-    claim?.advertisedWording 
-      ? `Introducing the all-new ${currentProduct?.productName || 'Product'}: ${claim.advertisedWording} with next-generation performance.`
-      : 'Introducing the all-new flagship model: Experience guaranteed performance and verified specifications.'
-  );
+  const [adCopyDraft, setAdCopyDraft] = useState('');
   const [scanResult, setScanResult] = useState<{
     riskLevel: 'HIGH' | 'MEDIUM' | 'PASS';
     flaggedPhrases: Array<{ phrase: string; rule: string; fix: string }>;
@@ -383,42 +379,35 @@ export const BrandConsoleView: React.FC<BrandConsoleViewProps> = ({
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className="mono">CR-2026-081</td>
-                  <td>Instagram Reel</td>
-                  <td>“50-Hour Nonstop Battery”</td>
-                  <td><span className="badge-c2pa-ok">C2PA Verified</span></td>
-                  <td><span className="impact-badge critical">CRITICAL</span></td>
-                  <td><span className="batch-status-flagged">Flagged by AI</span></td>
-                  <td><button className="btn btn-sm btn-secondary">Review</button></td>
-                </tr>
-                <tr>
-                  <td className="mono">CR-2026-082</td>
-                  <td>YouTube 15s</td>
-                  <td>“Up to 40 Hours Runtime (ANC off)”</td>
-                  <td><span className="badge-c2pa-ok">C2PA Verified</span></td>
-                  <td><span className="impact-badge informational">LOW</span></td>
-                  <td><span className="batch-status-cleared">Cleared</span></td>
-                  <td><button className="btn btn-sm btn-secondary">Audit</button></td>
-                </tr>
-                <tr>
-                  <td className="mono">CR-2026-083</td>
-                  <td>Amazon Headline</td>
-                  <td>“Best in Class 50-Hour Playtime”</td>
-                  <td><span className="badge-c2pa-none">Missing</span></td>
-                  <td><span className="impact-badge critical">CRITICAL</span></td>
-                  <td><span className="batch-status-flagged">Takedown Sent</span></td>
-                  <td><button className="btn btn-sm btn-danger">Takedown</button></td>
-                </tr>
-                <tr>
-                  <td className="mono">CR-2026-084</td>
-                  <td>Google Search Ad</td>
-                  <td>“Over-Ear Studio Headphones with LDAC”</td>
-                  <td><span className="badge-c2pa-na">Text Only</span></td>
-                  <td><span className="impact-badge informational">LOW</span></td>
-                  <td><span className="batch-status-cleared">Cleared</span></td>
-                  <td><button className="btn btn-sm btn-secondary">Audit</button></td>
-                </tr>
+                {(!claim || !claim.travelOccurrences || claim.travelOccurrences.length === 0) ? (
+                  <tr>
+                    <td colSpan={7} style={{ textAlign: 'center', padding: '36px', color: '#AEB6C2' }}>
+                      No active creative assets in monitoring queue. Ingest advertisements in the studio to track cross-channel distribution.
+                    </td>
+                  </tr>
+                ) : (
+                  claim.travelOccurrences.map((occ, idx) => (
+                    <tr key={idx}>
+                      <td className="mono">CR-{claim.id.slice(-4)}-{idx + 1}</td>
+                      <td>{occ.platform}</td>
+                      <td>“{claim.advertisedWording.slice(0, 40)}...”</td>
+                      <td><span className="badge-c2pa-ok">C2PA Verified</span></td>
+                      <td>
+                        <span className={`impact-badge ${claim.status === 'CONTRADICTED' ? 'critical' : 'informational'}`}>
+                          {claim.status === 'CONTRADICTED' ? 'CRITICAL' : 'NORMAL'}
+                        </span>
+                      </td>
+                      <td>
+                        <span className={claim.status === 'CONTRADICTED' ? 'batch-status-flagged' : 'batch-status-cleared'}>
+                          {claim.status === 'CONTRADICTED' ? 'Flagged by AI' : 'Cleared'}
+                        </span>
+                      </td>
+                      <td>
+                        <button className="btn btn-sm btn-secondary">Review</button>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
@@ -435,14 +424,18 @@ export const BrandConsoleView: React.FC<BrandConsoleViewProps> = ({
                 Submit official technical clarification to explain lab or retailer divergences without overwriting public records.
               </p>
             </div>
-            <span className="badge-meta">Current Claim: {claim.id}</span>
+            <span className="badge-meta">Current Claim: {claim.id || 'N/A'}</span>
           </div>
 
           <div className="dispute-form-wrap">
             <div className="dispute-context-summary">
-              <strong>Public Claim under Review:</strong> “{claim.advertisedWording}”
+              <strong>Public Claim under Review:</strong> “{claim.advertisedWording || 'No claim selected'}”
               <br />
-              <span className="text-secondary">Official spec: 40h | Lab benchmark: 38.4h | Retailer copied: 50h</span>
+              <span className="text-secondary">
+                {claim.sources && claim.sources.length > 0 
+                  ? claim.sources.map(s => `${s.sourceName}: ${s.observedValue}`).join(' | ') 
+                  : 'Awaiting evidence lookup'}
+              </span>
             </div>
 
             <div className="form-group">

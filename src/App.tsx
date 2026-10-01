@@ -23,13 +23,6 @@ import { BrandConsoleView } from './components/BrandConsoleView';
 import { RegulatoryShieldView } from './components/RegulatoryShieldView';
 import { EvaluationDashboard } from './components/EvaluationDashboard';
 
-import { 
-  INITIAL_CLAIM_PASSPORTS, 
-  INITIAL_PRODUCTS, 
-  INITIAL_TIMELINE_EVENTS, 
-  INITIAL_NOTIFICATIONS, 
-  INITIAL_CONSUMER_OBSERVATIONS 
-} from './data/mockData';
 import type { 
   ClaimPassport, 
   Product, 
@@ -52,13 +45,16 @@ export function App() {
   const [appMode, setAppMode] = useState<'enterprise' | 'consumer' | 'landing'>('enterprise');
   const [currentNav, setCurrentNav] = useState<NavItem>('overview');
 
-  // Active Database State - Persisted to LocalStorage or started in pristine state
+  // Active Database State - Persisted to LocalStorage or started in pristine clean state
   const [claims, setClaims] = useState<ClaimPassport[]>(() => {
     try {
       const saved = localStorage.getItem('ad_evidence_verified_claims');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const valid = parsed.filter(c => !c.id?.startsWith('CLM-829') && !c.productId?.includes('xyz-headset'));
+          if (valid.length > 0) return valid;
+        }
       }
     } catch {}
     return [];
@@ -69,7 +65,10 @@ export function App() {
       const saved = localStorage.getItem('ad_evidence_verified_products');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const valid = parsed.filter(p => !p.id?.includes('xyz-headset') && !p.id?.includes('ultraglow') && !p.id?.includes('voltdrive'));
+          if (valid.length > 0) return valid;
+        }
       }
     } catch {}
     return [];
@@ -80,7 +79,10 @@ export function App() {
       const saved = localStorage.getItem('ad_evidence_verified_events');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) return parsed;
+        if (Array.isArray(parsed)) {
+          const valid = parsed.filter(e => !e.claimId?.startsWith('CLM-829'));
+          if (valid.length > 0) return valid;
+        }
       }
     } catch {}
     return [];
@@ -97,7 +99,16 @@ export function App() {
     return [];
   });
 
-  const [consumerObservations, setConsumerObservations] = useState<ConsumerObservation[]>(INITIAL_CONSUMER_OBSERVATIONS);
+  const [consumerObservations, setConsumerObservations] = useState<ConsumerObservation[]>(() => {
+    try {
+      const saved = localStorage.getItem('ad_evidence_verified_observations');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch {}
+    return [];
+  });
 
   // Selected Claim
   const [selectedClaimId, setSelectedClaimId] = useState<string>(() => {
@@ -105,7 +116,10 @@ export function App() {
       const saved = localStorage.getItem('ad_evidence_verified_claims');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed[0]?.id) return parsed[0].id;
+        if (Array.isArray(parsed)) {
+          const valid = parsed.filter(c => !c.id?.startsWith('CLM-829') && !c.productId?.includes('xyz-headset'));
+          if (valid.length > 0 && valid[0]?.id) return valid[0].id;
+        }
       }
     } catch {}
     return '';
@@ -356,6 +370,8 @@ export function App() {
             <OverviewDashboard 
               claims={claims}
               timelineEvents={timelineEvents}
+              onVerifyNew={() => setCurrentNav('verify')}
+              onExploreGraph={() => setCurrentNav('graph')}
               onSelectClaim={handleSelectClaim}
             />
           )}
@@ -467,7 +483,10 @@ export function App() {
 
           {currentNav === 'projects' && (
             <ProjectsView 
+              claims={claims}
+              products={products}
               onOpenProject={(projId) => setCurrentNav('claims')}
+              onVerifyNew={() => setCurrentNav('verify')}
             />
           )}
 

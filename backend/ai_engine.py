@@ -71,6 +71,7 @@ async def call_gemini_with_retry(prompt, system_instruction="", temperature=0.1,
                         contents=contents if contents else prompt,
                         config=config
                     )
+                    return response  # Success — return immediately
                 except Exception as e:
                     error_str = str(e)
                     # If Google Search grounding hits quota/rate limits (429), fall back to pure LLM synthesis immediately
@@ -595,6 +596,7 @@ async def research_evidence_for_claim(
     Uses Gemini with Google Search grounding to find real evidence
     for a specific claim. Returns structured evidence from multiple source types.
     """
+    today_str = datetime.now().strftime("%d %b %Y")
 
     system_instruction = """You are an evidence researcher for AD-EVIDENCE, an independent advertising claim verification platform.
 Your critical mandate is to find REAL, EMPIRICAL evidence about product claims from both authoritative engineering documentation AND real-world online social media & e-commerce channels where the product is sold and discussed.

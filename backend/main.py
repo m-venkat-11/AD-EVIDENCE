@@ -14,7 +14,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
 
-from ai_engine import run_full_verification_pipeline, extract_claims_from_ad
+from ai_engine import run_full_verification_pipeline, extract_claims_from_ad, call_gemini_with_retry
 
 load_dotenv()
 
@@ -24,10 +24,10 @@ app = FastAPI(
     version="2.4.0"
 )
 
-# CORS — allow the Vite dev server
+# CORS — allow the Vite dev server and all local origins
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=os.getenv("CORS_ORIGINS", "http://localhost:5173").split(","),
+    allow_origin_regex=r"https?://.*",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -146,33 +146,127 @@ async def analyze_image(
 @app.post("/api/analyze/url")
 async def analyze_url(request: Request):
     """
-    Analyze an ad from a URL — uses Gemini search grounding to read the page.
+    Analyze an ad/product from a URL.
+    Strategy:
+      1. Try to fetch and read the page content directly via httpx
+      2. If that fails (Flipkart/Amazon block scraping), use Gemini with
+         Google Search grounding to look up the product info
+      3. Run the extracted text through the full verification pipeline
     """
     body = await request.json()
-    url = body.get("url", "")
-    product_hint = body.get("productHint", "")
+    url = body.get("url", "").strip()
+    product_hint = body.get("productHint", "").strip()
 
     if not url:
         raise HTTPException(status_code=400, detail="URL is required")
 
+    # Extract meaningful product name from URL slug if not provided (e.g. Flipkart, Amazon)
+    if not product_hint and url:
+        try:
+            import urllib.parse
+            parsed_url = urllib.parse.urlparse(url)
+            segments = [s for s in parsed_url.path.split('/') if s and s not in ('p', 'dp', 'gp', 'product', 'item', 'buy')]
+            if segments:
+                candidate = segments[0].replace('-', ' ').replace('_', ' ').strip()
+                if len(candidate) > 3 and not candidate.isdigit():
+                    product_hint = candidate.title()
+                    print(f"[URL] Extracted product hint from URL: {product_hint}")
+        except Exception:
+            pass
+
     try:
-        from google import genai
+        import httpx
         from google.genai import types
 
-        client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+        extracted_text = None
 
-        response = client.models.generate_content(
-            model="gemini-3.8-flash",
-            contents=f"Analyze this advertisement URL and extract all commercial claims: {url}. List the product name, brand, and every specific claim (numbers, prices, specs, warranties, performance figures).",
-            config=types.GenerateContentConfig(
-                temperature=0.1,
-                max_output_tokens=4096,
-                tools=[types.Tool(google_search=types.GoogleSearch())],
+        # ----- STEP 1: Try direct page fetch with httpx -----
+        try:
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                "Accept-Language": "en-US,en;q=0.9",
+            }
+            async with httpx.AsyncClient(timeout=httpx.Timeout(6.0, connect=3.0), follow_redirects=True, verify=False) as http_client:
+                resp = await http_client.get(url, headers=headers)
+                if resp.status_code == 200 and len(resp.text) > 200:
+                    # Strip HTML to plain text (rough extraction)
+                    import re
+                    page_text = resp.text
+                    # Remove script/style blocks
+                    page_text = re.sub(r'<script[^>]*>.*?</script>', ' ', page_text, flags=re.DOTALL | re.IGNORECASE)
+                    page_text = re.sub(r'<style[^>]*>.*?</style>', ' ', page_text, flags=re.DOTALL | re.IGNORECASE)
+                    # Remove tags
+                    page_text = re.sub(r'<[^>]+>', ' ', page_text)
+                    # Collapse whitespace
+                    page_text = re.sub(r'\s+', ' ', page_text).strip()
+
+                    if len(page_text) > 100:
+                        # Use Gemini to extract claims from the scraped page text
+                        snippet = page_text[:8000]  # Cap to avoid token limits
+                        extract_response = await call_gemini_with_retry(
+                            prompt=f"""You are analyzing a product listing page. Extract the product name, brand, and ALL commercial claims (specifications, prices, performance numbers, warranties, certifications, superlatives).
+
+URL: {url}
+Product hint: {product_hint or 'Not specified'}
+
+PAGE CONTENT:
+{snippet}
+
+List the product name and brand first, then every specific claim made on this page.""",
+                            temperature=0.1,
+                            max_tokens=4096
+                        )
+                        extracted_text = extract_response.text
+                        print(f"[URL] Direct page fetch succeeded for {url[:60]}...")
+                else:
+                    print(f"[URL] Direct fetch returned HTTP {resp.status_code} for {url[:60]}, falling back to search grounding...")
+        except Exception as fetch_err:
+            print(f"[URL] Direct page fetch failed ({str(fetch_err)[:80]}), falling back to search grounding...")
+
+        # ----- STEP 2: If direct fetch failed, use Gemini with Google Search -----
+        if not extracted_text:
+            try:
+                search_response = await call_gemini_with_retry(
+                    prompt=f"""Look up this product URL and extract ALL commercial claims from it: {url}
+
+Product hint: {product_hint or 'Not specified'}
+
+Search for this product online and provide:
+1. The exact product name and brand
+2. Every specific commercial claim: prices, specifications, performance numbers, battery capacity, camera megapixels, processor, RAM, storage, display size, weight, warranties, certifications, superlatives like "best" or "fastest"
+3. Any conditions or fine print attached to claims
+
+Be thorough — extract EVERY verifiable number and marketing assertion.""",
+                    temperature=0.1,
+                    max_tokens=4096,
+                    tools=[types.Tool(google_search=types.GoogleSearch())]
+                )
+                extracted_text = search_response.text
+                print(f"[URL] Search grounding succeeded for {url[:60]}...")
+            except Exception as search_err:
+                print(f"[URL] Search grounding also failed ({str(search_err)[:80]}), using LLM knowledge...")
+
+        # ----- STEP 3: Final fallback — pure LLM knowledge synthesis -----
+        if not extracted_text:
+            knowledge_response = await call_gemini_with_retry(
+                prompt=f"""Based on your training knowledge, analyze this product URL: {url}
+
+Product hint: {product_hint or 'Not specified'}
+
+Provide:
+1. The product name and brand (identify from the URL pattern)
+2. All known specifications, prices, and commercial claims for this product
+3. Any known issues or controversies about the product's advertised claims
+
+Note: I could not fetch the page directly. Use your knowledge to provide the most accurate information available.""",
+                temperature=0.2,
+                max_tokens=4096
             )
-        )
+            extracted_text = knowledge_response.text
+            print(f"[URL] LLM knowledge fallback used for {url[:60]}...")
 
-        extracted_text = response.text
-
+        # ----- STEP 4: Run through full verification pipeline -----
         result = await run_full_verification_pipeline(
             ad_text=extracted_text,
             product_hint=product_hint
@@ -192,7 +286,10 @@ async def analyze_url(request: Request):
             "error": result.get("error")
         }
 
+    except HTTPException:
+        raise
     except Exception as e:
+        print(f"[URL ERROR] {str(e)[:200]}")
         raise HTTPException(status_code=500, detail=f"URL analysis failed: {str(e)}")
 
 

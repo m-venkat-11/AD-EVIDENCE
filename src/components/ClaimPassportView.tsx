@@ -67,6 +67,22 @@ export const ClaimPassportView: React.FC<ClaimPassportViewProps> = ({
     }, 600);
   };
 
+  if (!claim || !claim.id || claim.id === 'CLM-EMPTY') {
+    return (
+      <div className="passport-page-container">
+        <div className="card" style={{ padding: '60px 24px', textAlign: 'center', margin: '20px 0' }}>
+          <FileCheck2 size={52} color="#00E5FF" style={{ margin: '0 auto 16px' }} />
+          <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#F5F7FF', marginBottom: '8px' }}>
+            No Claim Passport Generated Yet
+          </h2>
+          <p style={{ fontSize: '0.9rem', color: '#AEB6C2', maxWidth: '540px', margin: '0 auto 20px', lineHeight: 1.6 }}>
+            Verify an advertisement in the Verify Content Studio to extract atomic claims and generate persistent Claim Passports backed by multi-source evidence.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="passport-page-container">
       {/* Signature Passport Header */}

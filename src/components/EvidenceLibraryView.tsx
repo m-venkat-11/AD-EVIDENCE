@@ -106,6 +106,19 @@ export const EvidenceLibraryView: React.FC<EvidenceLibraryViewProps> = ({
 
       {/* Evidence Cards Grid */}
       <div className="evidence-cards-grid">
+        {filtered.length === 0 && (
+          <div className="card" style={{ padding: '60px 24px', textAlign: 'center', gridColumn: '1 / -1' }}>
+            <Database size={48} color="#00E5FF" style={{ margin: '0 auto 16px' }} />
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#F5F7FF', marginBottom: '8px' }}>
+              {claims.length === 0 ? 'No Evidence Sources Grounded' : 'No Matching Evidence Records'}
+            </h3>
+            <p style={{ fontSize: '0.9rem', color: '#AEB6C2', maxWidth: '500px', margin: '0 auto' }}>
+              {claims.length === 0 
+                ? 'Verify an advertisement in the studio to extract and ground multi-source evidence.'
+                : 'Try adjusting your search query or source filter.'}
+            </p>
+          </div>
+        )}
         {filtered.map((item, idx) => (
           <div key={idx} className="evidence-library-item card">
             <div className="evidence-item-header">

@@ -48,11 +48,9 @@ export const VerifyContentStudio: React.FC<VerifyContentStudioProps> = ({
   onOpenPassport
 }) => {
   const [inputType, setInputType] = useState<'text' | 'url' | 'upload'>('text');
-  const [rawText, setRawText] = useState(
-    'Samsung Galaxy S24 Ultra: 200MP camera with AI nightography, 5000mAh all-day battery with 45W fast charging, titanium frame, starting at Rs 1,29,999.'
-  );
-  const [urlInput, setUrlInput] = useState('https://samsung.com/galaxy-s24-ultra');
-  const [productNameInput, setProductNameInput] = useState('Samsung Galaxy S24 Ultra');
+  const [rawText, setRawText] = useState('');
+  const [urlInput, setUrlInput] = useState('');
+  const [productNameInput, setProductNameInput] = useState('');
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [backendOnline, setBackendOnline] = useState<boolean | null>(null);
@@ -62,7 +60,6 @@ export const VerifyContentStudio: React.FC<VerifyContentStudioProps> = ({
   // Processing state
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [currentStageIndex, setCurrentStageIndex] = useState(0);
-  const [selectedPresetId, setSelectedPresetId] = useState<string>('preset-audio');
 
   React.useEffect(() => {
     checkBackendHealth().then(res => {
@@ -581,103 +578,7 @@ export const VerifyContentStudio: React.FC<VerifyContentStudioProps> = ({
         </div>
       </div>
 
-      {/* Real AI Ad Test Presets */}
-      <div className="card" style={{ padding: '16px 20px', background: 'rgba(14, 21, 44, 0.8)', border: '1px solid rgba(61, 90, 254, 0.35)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', marginBottom: '12px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Bot size={18} color="#00E5FF" />
-            <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#F5F7FF', letterSpacing: '0.02em' }}>
-              REAL AI AD TEST SUITE
-            </span>
-            <span style={{ fontSize: '0.7rem', color: '#00E5FF', background: 'rgba(0, 229, 255, 0.12)', border: '1px solid rgba(0, 229, 255, 0.3)', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>
-              Live AI Campaigns
-            </span>
-          </div>
-          <span style={{ fontSize: '0.74rem', color: '#AEB6C2' }}>
-            Select an active AI advertisement to run full end-to-end verification:
-          </span>
-        </div>
 
-        <div className="presets-row" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-          <button 
-            className={`preset-tag ${selectedPresetId === 'preset-audio' ? 'active-preset' : ''}`}
-            onClick={() => {
-              setSelectedPresetId('preset-audio');
-              setRawText('SoundWave WH-950PRO: World\'s first AI-powered neural noise cancellation with guaranteed 50-hour nonstop battery life and instant zero-latency translation for ₹5,499!');
-              setProductNameInput('XYZ Wireless Headphones Pro (WH-950PRO)');
-              setUrlInput('https://instagram.com/reel/C9xL2094Kz');
-            }}
-            style={{
-              background: selectedPresetId === 'preset-audio' ? 'rgba(61, 90, 254, 0.3)' : 'rgba(14, 20, 42, 0.6)',
-              border: selectedPresetId === 'preset-audio' ? '1.5px solid #00E5FF' : '1px solid rgba(61, 90, 254, 0.25)',
-              color: selectedPresetId === 'preset-audio' ? '#FFFFFF' : '#AEB6C2',
-              padding: '8px 14px',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontSize: '0.78rem',
-              fontWeight: 600,
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <Sparkles size={14} color="#00E5FF" />
-            <span>AI Audio Ad: SoundWave 50h & Translation</span>
-          </button>
-
-          <button 
-            className={`preset-tag ${selectedPresetId === 'preset-beauty' ? 'active-preset' : ''}`}
-            onClick={() => {
-              setSelectedPresetId('preset-beauty');
-              setRawText('DermaPure UltraGlow Super C: Dermatologist approved 100% wrinkle elimination in just 7 days with AI-synthesized nano-collagen peptides.');
-              setProductNameInput('UltraGlow Super C Radiance Serum');
-              setUrlInput('https://tiktok.com/@dermapure/video/7391829104');
-            }}
-            style={{
-              background: selectedPresetId === 'preset-beauty' ? 'rgba(61, 90, 254, 0.3)' : 'rgba(14, 20, 42, 0.6)',
-              border: selectedPresetId === 'preset-beauty' ? '1.5px solid #00E5FF' : '1px solid rgba(61, 90, 254, 0.25)',
-              color: selectedPresetId === 'preset-beauty' ? '#FFFFFF' : '#AEB6C2',
-              padding: '8px 14px',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontSize: '0.78rem',
-              fontWeight: 600,
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <Bot size={14} color="#FF2FA3" />
-            <span>AI Avatar Ad: UltraGlow 100% Wrinkle Claim</span>
-          </button>
-
-          <button 
-            className={`preset-tag ${selectedPresetId === 'preset-ev' ? 'active-preset' : ''}`}
-            onClick={() => {
-              setSelectedPresetId('preset-ev');
-              setRawText('VoltDrive City S-100: Starting at ₹44,999 with 120km certified single-charge range and zero battery degradation for 5 years.');
-              setProductNameInput('VoltDrive City S-100 Electric Scooter');
-              setUrlInput('https://google.com/searchads/voltdrive-s100');
-            }}
-            style={{
-              background: selectedPresetId === 'preset-ev' ? 'rgba(61, 90, 254, 0.3)' : 'rgba(14, 20, 42, 0.6)',
-              border: selectedPresetId === 'preset-ev' ? '1.5px solid #00E5FF' : '1px solid rgba(61, 90, 254, 0.25)',
-              color: selectedPresetId === 'preset-ev' ? '#FFFFFF' : '#AEB6C2',
-              padding: '8px 14px',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontSize: '0.78rem',
-              fontWeight: 600,
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <Clock size={14} color="#FF8A1E" />
-            <span>AI Search Ad: VoltDrive ₹44,999 Range Ad</span>
-          </button>
-        </div>
-      </div>
 
       {/* Input Selection Tabs */}
       <div className="studio-input-card card" style={{ marginTop: '16px' }}>
@@ -738,13 +639,28 @@ export const VerifyContentStudio: React.FC<VerifyContentStudioProps> = ({
 
           {inputType === 'url' && (
             <div className="form-group-full">
-              <label className="field-label">Advertisement or Product Page URL:</label>
+              <label className="field-label">Advertisement or Product Page URL (Flipkart, Amazon, Brand Site, Social Ad):</label>
               <input 
                 type="url" 
                 className="input-text" 
-                placeholder="https://instagram.com/reel/... or https://amazon.com/dp/..."
+                placeholder="Paste product or ad link (e.g. https://www.flipkart.com/... or https://amazon.in/... or social post URL)"
                 value={urlInput}
-                onChange={(e) => setUrlInput(e.target.value)}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setUrlInput(val);
+                  if (!productNameInput && val) {
+                    try {
+                      const urlObj = new URL(val);
+                      const parts = urlObj.pathname.split('/').filter(p => p && !['p', 'dp', 'gp', 'product', 'item', 'buy'].includes(p));
+                      if (parts.length > 0) {
+                        const candidate = parts[0].replace(/[-_]/g, ' ').trim();
+                        if (candidate.length > 3 && !/^\d+$/.test(candidate)) {
+                          setProductNameInput(candidate.replace(/\b\w/g, l => l.toUpperCase()));
+                        }
+                      }
+                    } catch {}
+                  }
+                }}
               />
             </div>
           )}
