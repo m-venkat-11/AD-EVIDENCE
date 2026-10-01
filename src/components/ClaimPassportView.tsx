@@ -38,7 +38,7 @@ export const ClaimPassportView: React.FC<ClaimPassportViewProps> = ({
 }) => {
   const [brandResponseInput, setBrandResponseInput] = useState(
     claim.brandDisputeResponse?.responseContent || 
-    'Our official test uses ANC OFF under standardized conditions (50% volume, AAC codec). Outward advertising copy is being updated to reflect both ANC ON and ANC OFF specifications.'
+    `Official ${product?.brandName || claim.brandName} testing protocols corroborate asserted performance under rated operating conditions. Documentation filed for compliance review.`
   );
   const [isSubmittingResponse, setIsSubmittingResponse] = useState(false);
   const [responseSubmittedNotice, setResponseSubmittedNotice] = useState(false);
@@ -144,7 +144,9 @@ export const ClaimPassportView: React.FC<ClaimPassportViewProps> = ({
           <div className="tree-node-claim-root">
             <div className="node-claim-box">
               <span className="node-kicker">ADVERTISED CLAIM</span>
-              <div className="node-val-large">50 hours</div>
+              <div className="node-val-large">
+                {claim.normalizedValue ? `${claim.normalizedValue} ${claim.unit || ''}`.trim() : (claim.advertisedWording.length > 25 ? claim.advertisedWording.slice(0, 22) + '...' : claim.advertisedWording)}
+              </div>
               <span className="node-caption">“{claim.advertisedWording}”</span>
             </div>
           </div>
@@ -165,25 +167,43 @@ export const ClaimPassportView: React.FC<ClaimPassportViewProps> = ({
             {/* Brand Node */}
             <div className="tree-node-box node-brand">
               <div className="node-type-label">OFFICIAL BRAND</div>
-              <div className="node-data-value text-green">40 hours</div>
-              <div className="node-sub-meta">Up to 40h (ANC Off)</div>
-              <span className="node-source-name">SoundWave Engineering Manual</span>
+              <div className="node-data-value text-green">
+                {claim.sources.find(s => s.sourceType === 'OFFICIAL_BRAND')?.observedValue || (claim.status === 'SUPPORTED' ? `${claim.normalizedValue || ''} ${claim.unit || ''}`.trim() || 'Factory Rating' : 'Specification Discrepancy')}
+              </div>
+              <div className="node-sub-meta">
+                {claim.sources.find(s => s.sourceType === 'OFFICIAL_BRAND')?.conditions || (claim.conditions.length > 0 ? claim.conditions.join(', ') : 'Standard Operating Baseline')}
+              </div>
+              <span className="node-source-name">
+                {claim.sources.find(s => s.sourceType === 'OFFICIAL_BRAND')?.sourceName || `${product?.brandName || claim.brandName} Specification`}
+              </span>
             </div>
 
             {/* Retailer Node */}
             <div className="tree-node-box node-retailer">
               <div className="node-type-label">RETAILER LISTING</div>
-              <div className="node-data-value text-amber">40 hours</div>
-              <div className="node-sub-meta">Catalog Spec</div>
-              <span className="node-source-name">Amazon Marketplace</span>
+              <div className="node-data-value text-amber">
+                {claim.sources.find(s => s.sourceType === 'RETAILER')?.observedValue || `${claim.normalizedValue || ''} ${claim.unit || ''}`.trim() || 'Market Listing Spec'}
+              </div>
+              <div className="node-sub-meta">
+                {claim.sources.find(s => s.sourceType === 'RETAILER')?.conditions || 'Merchant Catalog Listing'}
+              </div>
+              <span className="node-source-name">
+                {claim.sources.find(s => s.sourceType === 'RETAILER')?.sourceName || 'Authorized Marketplace Listing'}
+              </span>
             </div>
 
             {/* Independent Test Node */}
             <div className="tree-node-box node-independent">
               <div className="node-type-label">INDEPENDENT TEST</div>
-              <div className="node-data-value text-red">38.4 hours</div>
-              <div className="node-sub-meta">IEC 60268 @ 75dB SPL</div>
-              <span className="node-source-name">AcousticLab Benchmarks</span>
+              <div className="node-data-value text-blue">
+                {claim.sources.find(s => s.sourceType === 'INDEPENDENT_LAB')?.observedValue || (claim.status === 'SUPPORTED' ? 'Benchmarking Passed' : 'Independent Benchmark')}
+              </div>
+              <div className="node-sub-meta">
+                {claim.sources.find(s => s.sourceType === 'INDEPENDENT_LAB')?.conditions || 'Standardized Laboratory Benchmark'}
+              </div>
+              <span className="node-source-name">
+                {claim.sources.find(s => s.sourceType === 'INDEPENDENT_LAB')?.sourceName || 'Certified Benchmark Bureau'}
+              </span>
             </div>
           </div>
 
@@ -196,8 +216,12 @@ export const ClaimPassportView: React.FC<ClaimPassportViewProps> = ({
           <div className="tree-node-consumer-root">
             <div className="node-consumer-box">
               <span className="node-type-label">CONSUMER OBSERVATIONS</span>
-              <div className="node-data-value text-blue">27–42 hours</div>
-              <span className="node-sub-meta">Median: 34.2h across 127 verified real-world telemetry logs</span>
+              <div className="node-data-value text-blue">
+                {claim.sources.find(s => s.sourceType === 'CONSUMER_OBSERVATION')?.observedValue || (claim.status === 'SUPPORTED' ? 'Consistent User Telemetry' : 'Real-World Field Logs')}
+              </div>
+              <span className="node-sub-meta">
+                {claim.sources.find(s => s.sourceType === 'CONSUMER_OBSERVATION')?.conditions || 'Verified purchaser and crowd observations logged'}
+              </span>
             </div>
           </div>
         </div>
@@ -206,7 +230,7 @@ export const ClaimPassportView: React.FC<ClaimPassportViewProps> = ({
         <div className="quantitative-bars-container">
           <div className="quant-section-title">
             <span>Quantitative Value Divergence: <code className="mono">`{claim.attribute}`</code></span>
-            <span className="quant-unit-pill">Units: <strong>{claim.unit}</strong></span>
+            <span className="quant-unit-pill">Units: <strong>{claim.unit || 'Spec'}</strong></span>
           </div>
 
           <div className="quant-bars-stack">
@@ -217,62 +241,39 @@ export const ClaimPassportView: React.FC<ClaimPassportViewProps> = ({
               </div>
               <div className="bar-progress-col">
                 <div className="bar-track">
-                  <div className="bar-fill fill-red" style={{ width: '100%' }}></div>
+                  <div className={`bar-fill ${claim.status === 'CONTRADICTED' ? 'fill-red' : 'fill-green'}`} style={{ width: '100%' }}></div>
                 </div>
-                <span className="bar-val-text font-bold">50 hours</span>
+                <span className="bar-val-text font-bold">
+                  {claim.normalizedValue ? `${claim.normalizedValue} ${claim.unit || ''}`.trim() : claim.advertisedWording.slice(0, 24)}
+                </span>
               </div>
               <div className="bar-condition-col">
-                <span>Unconditional guarantee asserted</span>
+                <span>{claim.conditions.length > 0 ? claim.conditions.join(', ') : 'Asserted in promotional copy'}</span>
               </div>
             </div>
 
-            <div className="quant-bar-row">
-              <div className="bar-label-col">
-                <span className="bar-source-tag official">OFFICIAL SPEC</span>
-                <span className="bar-source-sub">User Manual p.18</span>
-              </div>
-              <div className="bar-progress-col">
-                <div className="bar-track">
-                  <div className="bar-fill fill-green" style={{ width: '80%' }}></div>
+            {claim.sources.map((source, sIdx) => (
+              <div key={source.id || sIdx} className="quant-bar-row">
+                <div className="bar-label-col">
+                  <span className={`bar-source-tag ${source.sourceType.toLowerCase()}`}>
+                    {source.sourceType.replace('_', ' ')}
+                  </span>
+                  <span className="bar-source-sub">{source.publisher || source.sourceName}</span>
                 </div>
-                <span className="bar-val-text">40 hours</span>
-              </div>
-              <div className="bar-condition-col">
-                <span>With ANC Off, 50% volume (30h with ANC On)</span>
-              </div>
-            </div>
-
-            <div className="quant-bar-row">
-              <div className="bar-label-col">
-                <span className="bar-source-tag lab">INDEPENDENT LAB</span>
-                <span className="bar-source-sub">AcousticLab Test</span>
-              </div>
-              <div className="bar-progress-col">
-                <div className="bar-track">
-                  <div className="bar-fill fill-amber" style={{ width: '76.8%' }}></div>
+                <div className="bar-progress-col">
+                  <div className="bar-track">
+                    <div 
+                      className={`bar-fill ${source.conflictFlag ? 'fill-red' : 'fill-green'}`} 
+                      style={{ width: source.conflictFlag ? '80%' : '100%' }}
+                    ></div>
+                  </div>
+                  <span className="bar-val-text">{source.observedValue}</span>
                 </div>
-                <span className="bar-val-text">38.4 hours</span>
-              </div>
-              <div className="bar-condition-col">
-                <span>IEC 60268 continuous pink noise @ 75dB</span>
-              </div>
-            </div>
-
-            <div className="quant-bar-row">
-              <div className="bar-label-col">
-                <span className="bar-source-tag consumer">CONSUMER LOGS</span>
-                <span className="bar-source-sub">127 Verified Users</span>
-              </div>
-              <div className="bar-progress-col">
-                <div className="bar-track">
-                  <div className="bar-fill fill-blue" style={{ width: '68.4%' }}></div>
+                <div className="bar-condition-col">
+                  <span>{source.conditions || 'Standard observation baseline'}</span>
                 </div>
-                <span className="bar-val-text">27–42 hours</span>
               </div>
-              <div className="bar-condition-col">
-                <span>Real-world mixed commuting & office use</span>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
@@ -324,10 +325,10 @@ export const ClaimPassportView: React.FC<ClaimPassportViewProps> = ({
 
           <div className="context-fields-list">
             <div className="context-field-row">
-              <span className="context-field-name">ANC Setting:</span>
+              <span className="context-field-name">Operating Conditions:</span>
               <div className="context-field-value">
-                <span className="badge-context-diff">Ad: Not specified</span>
-                <span className="badge-context-ok">Official: ANC OFF</span>
+                <span className="badge-context-diff">Ad: {claim.conditions.length > 0 ? claim.conditions.join(', ') : 'Unqualified Claim'}</span>
+                <span className="badge-context-ok">Official: {claim.sources.find(s => s.sourceType === 'OFFICIAL_BRAND')?.conditions || 'Standard Rated Protocol'}</span>
               </div>
             </div>
 
@@ -433,8 +434,15 @@ export const ClaimPassportView: React.FC<ClaimPassportViewProps> = ({
           <div className="response-evidence-side">
             <span className="side-title">AUDITED INDEPENDENT EVIDENCE:</span>
             <div className="evidence-quote-box">
-              <strong>AcousticLab Independent Benchmark:</strong>
-              <p>“38.4 hours measured under IEC 60268 continuous playback at 75dB SPL.”</p>
+              {(() => {
+                const indSrc = claim.sources.find(s => s.sourceType === 'INDEPENDENT_LAB') || claim.sources[0];
+                return (
+                  <>
+                    <strong>{indSrc?.sourceName || 'Independent Evidence Source'}:</strong>
+                    <p>“{indSrc?.observedValue ? `${indSrc.observedValue} (${indSrc.conditions || 'standard benchmark conditions'})` : claim.fourQuestions.whatEvidenceSaid}”</p>
+                  </>
+                );
+              })()}
             </div>
           </div>
 

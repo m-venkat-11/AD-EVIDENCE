@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { 
   Search, 
   Bell, 
-  HelpCircle, 
   Building2, 
-  ChevronDown, 
   CheckCircle2, 
-  AlertTriangle,
-  SlidersHorizontal,
-  X
+  AlertTriangle, 
+  Sun, 
+  Moon, 
+  PlusCircle, 
+  X 
 } from 'lucide-react';
 import type { SystemNotification } from '../types';
 
@@ -27,7 +27,6 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenSearch,
   notifications,
   onSelectClaim,
-  onOpenHelp,
   theme = 'dark',
   onToggleTheme,
   workspaceName = 'Global Brand Assurance',
@@ -38,17 +37,25 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className="global-header">
-      {/* Left: Workspace Selector */}
+      {/* Left: Active Workspace Badge */}
       <div className="header-left">
-        <div className="workspace-dropdown-trigger" onClick={onNewVerification} style={{ cursor: onNewVerification ? 'pointer' : 'default' }}>
-          <div className="workspace-icon">
-            <Building2 size={16} color="var(--text-primary)" />
+        <div 
+          className="workspace-badge-box" 
+          onClick={onNewVerification}
+          title="Active Verification Workspace — Click to verify an ad"
+          style={{ cursor: onNewVerification ? 'pointer' : 'default', display: 'flex', alignItems: 'center', gap: '10px' }}
+        >
+          <div className="workspace-icon" style={{ background: 'rgba(0, 229, 255, 0.1)', padding: '6px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Building2 size={16} color="var(--brand-cyan, #00E5FF)" />
           </div>
           <div className="workspace-info">
-            <span className="workspace-label">Active Workspace</span>
-            <span className="workspace-name">{workspaceName}</span>
+            <span className="workspace-label" style={{ fontSize: '0.68rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--text-secondary, #94A3B8)', display: 'block' }}>
+              Active Workspace
+            </span>
+            <span className="workspace-name" style={{ fontWeight: 600, fontSize: '0.88rem', color: 'var(--text-primary, #F5F7FF)' }}>
+              {workspaceName}
+            </span>
           </div>
-          <ChevronDown size={14} color="var(--text-secondary)" />
         </div>
       </div>
 
@@ -63,9 +70,9 @@ export const Header: React.FC<HeaderProps> = ({
         </button>
       </div>
 
-      {/* Right: Engine Status, Notifications, Help, Profile */}
-      <div className="header-right">
-        {/* Verification & Trust Engine Live Status Badge */}
+      {/* Right: Engine Status, Notifications, Theme Toggle, + Verify Action */}
+      <div className="header-right" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        {/* Verification Engine Active Pill */}
         <div 
           className="engine-status-badge" 
           title="Multi-Source Verification Engine Active (Gemini Grounding v2.4 + Deterministic Rule Engine + C2PA Provenance)"
@@ -74,6 +81,7 @@ export const Header: React.FC<HeaderProps> = ({
           <span className="engine-status-text">Evidence Engine Active</span>
           <span className="engine-version-tag">v2.4</span>
         </div>
+
         {/* Notifications Popover Trigger */}
         <div className="relative-container">
           <button 
@@ -98,52 +106,70 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
 
               <div className="notifications-list">
-                {notifications.map((notif) => (
-                  <div 
-                    key={notif.id} 
-                    className={`notification-item ${!notif.read ? 'unread' : ''}`}
-                    onClick={() => {
-                      if (notif.claimId) onSelectClaim(notif.claimId);
-                      setShowNotifications(false);
-                    }}
-                  >
-                    <div className="notif-icon-col">
-                      {notif.severity === 'CRITICAL' ? (
-                        <AlertTriangle size={15} color="#FF2FA3" />
-                      ) : notif.severity === 'WARNING' ? (
-                        <AlertTriangle size={15} color="#FF8A1E" />
-                      ) : (
-                        <CheckCircle2 size={15} color="#00E5FF" />
-                      )}
-                    </div>
-                    <div className="notif-content-col">
-                      <div className="notif-item-title">{notif.title}</div>
-                      <div className="notif-item-msg">{notif.message}</div>
-                      <div className="notif-item-time">{notif.date}</div>
-                    </div>
+                {notifications.length === 0 ? (
+                  <div style={{ padding: '16px', textAlign: 'center', color: 'var(--text-secondary, #94A3B8)', fontSize: '0.85rem' }}>
+                    No alerts pending in active workspace
                   </div>
-                ))}
+                ) : (
+                  notifications.map((notif) => (
+                    <div 
+                      key={notif.id} 
+                      className={`notification-item ${!notif.read ? 'unread' : ''}`}
+                      onClick={() => {
+                        if (notif.claimId) onSelectClaim(notif.claimId);
+                        setShowNotifications(false);
+                      }}
+                    >
+                      <div className="notif-icon-col">
+                        {notif.severity === 'CRITICAL' ? (
+                          <AlertTriangle size={15} color="#FF2FA3" />
+                        ) : notif.severity === 'WARNING' ? (
+                          <AlertTriangle size={15} color="#FF8A1E" />
+                        ) : (
+                          <CheckCircle2 size={15} color="#00E5FF" />
+                        )}
+                      </div>
+                      <div className="notif-content-col">
+                        <div className="notif-item-title">{notif.title}</div>
+                        <div className="notif-item-msg">{notif.message}</div>
+                        <div className="notif-item-time">{notif.date}</div>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           )}
         </div>
 
-        {/* Help / Methodology */}
-        <button 
-          className="header-icon-btn" 
-          onClick={onOpenHelp}
-          title="Methodology & Documentation"
-        >
-          <HelpCircle size={18} color="var(--text-secondary)" />
-        </button>
+        {/* Functional Theme Toggle Button */}
+        {onToggleTheme && (
+          <button 
+            className="header-icon-btn" 
+            onClick={onToggleTheme}
+            title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >
+            {theme === 'dark' ? (
+              <Sun size={18} color="#FFD166" />
+            ) : (
+              <Moon size={18} color="#4361EE" />
+            )}
+          </button>
+        )}
 
-        {/* Profile Avatar */}
-        <div className="header-profile-box">
-          <div className="header-avatar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Building2 size={14} color="#00E5FF" />
-          </div>
-          <span className="header-status-indicator"></span>
-        </div>
+        {/* Primary Action Button: + Verify Ad */}
+        {onNewVerification && (
+          <button 
+            className="btn btn-primary btn-sm"
+            onClick={onNewVerification}
+            title="Start New Ad Verification"
+            style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600, padding: '6px 14px' }}
+          >
+            <PlusCircle size={15} />
+            <span>Verify Ad</span>
+          </button>
+        )}
       </div>
     </header>
   );

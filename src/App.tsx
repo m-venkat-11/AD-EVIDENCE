@@ -16,6 +16,7 @@ import { ProjectsView } from './components/ProjectsView';
 import { AlertsView } from './components/AlertsView';
 import { DataSourcesView } from './components/DataSourcesView';
 import { HelpView } from './components/HelpView';
+import { SettingsView } from './components/SettingsView';
 import { PublicLandingView } from './components/PublicLandingView';
 import { ConsumerReportModal } from './components/ConsumerReportModal';
 import { BrandConsoleView } from './components/BrandConsoleView';
@@ -333,6 +334,7 @@ export function App() {
         appMode={appMode}
         onSwitchMode={setAppMode}
         unreadAlertCount={notifications.filter(n => !n.read).length}
+        conflictCount={claims.filter(c => c.status === 'CONTRADICTED').length}
       />
 
       {/* Main Workspace Frame */}
@@ -512,7 +514,14 @@ export function App() {
           )}
 
           {currentNav === 'settings' && (
-            <HelpView />
+            <SettingsView 
+              claims={claims}
+              product={activeProduct}
+              theme={theme}
+              onToggleTheme={() => setTheme(prev => prev === 'dark' ? 'light' : 'dark')}
+              workspaceName={activeProduct?.productName && activeProduct.productName !== 'No Advertisement Verified' ? `${activeProduct.brandName} Verification Workspace` : 'Global Brand Assurance'}
+              onResetWorkspace={handleResetWorkspace}
+            />
           )}
 
           {currentNav === 'help' && (

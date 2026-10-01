@@ -49,6 +49,7 @@ interface SidebarProps {
   appMode: 'enterprise' | 'consumer' | 'landing';
   onSwitchMode: (mode: 'enterprise' | 'consumer' | 'landing') => void;
   unreadAlertCount: number;
+  conflictCount?: number;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -56,7 +57,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onNavigate,
   appMode,
   onSwitchMode,
-  unreadAlertCount
+  unreadAlertCount,
+  conflictCount = 0
 }) => {
   return (
     <aside className="sidebar-container">
@@ -162,7 +164,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           >
             <AlertTriangle size={18} />
             <span>Conflicts</span>
-            <span className="badge-nav-alert">18</span>
+            {conflictCount > 0 && (
+              <span className="badge-nav-alert">{conflictCount}</span>
+            )}
           </button>
 
           <button 
