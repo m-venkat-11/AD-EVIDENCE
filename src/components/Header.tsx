@@ -15,13 +15,15 @@ interface HeaderProps {
   onSelectClaim: (claimId: string) => void;
   onOpenHelp: () => void;
   workspaceName?: string;
+  onReplayIntro?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   onOpenSearch,
   notifications,
   onSelectClaim,
-  workspaceName = 'Global Brand Assurance'
+  workspaceName = 'Global Brand Assurance',
+  onReplayIntro
 }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const unreadCount = notifications.filter(n => !n.read).length;
@@ -71,6 +73,33 @@ export const Header: React.FC<HeaderProps> = ({
           <span className="engine-status-text">Evidence Engine Active</span>
           <span className="engine-version-tag">v2.4</span>
         </div>
+
+        {/* 3D Intro Animation Replay Trigger */}
+        {onReplayIntro && (
+          <button 
+            className="intro-replay-trigger-btn"
+            onClick={onReplayIntro}
+            title="Play 3D Holographic Title Intro"
+            style={{
+              background: 'rgba(0, 229, 255, 0.1)',
+              border: '1px solid rgba(0, 229, 255, 0.35)',
+              color: '#00E5FF',
+              padding: '6px 12px',
+              borderRadius: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              fontSize: '0.78rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              backdropFilter: 'blur(8px)'
+            }}
+          >
+            <span style={{ display: 'inline-block', width: '6px', height: '6px', borderRadius: '50%', background: '#00E5FF', boxShadow: '0 0 8px #00E5FF' }}></span>
+            <span>3D Intro</span>
+          </button>
+        )}
 
         {/* Notifications Popover Trigger */}
         <div className="relative-container">

@@ -22,6 +22,7 @@ import { ConsumerReportModal } from './components/ConsumerReportModal';
 import { BrandConsoleView } from './components/BrandConsoleView';
 import { RegulatoryShieldView } from './components/RegulatoryShieldView';
 import { EvaluationDashboard } from './components/EvaluationDashboard';
+import { TitleIntroAnimation } from './components/TitleIntroAnimation';
 
 import type { 
   ClaimPassport, 
@@ -40,6 +41,9 @@ export function App() {
       localStorage.setItem('ad_evidence_theme', 'dark');
     } catch {}
   }, []);
+
+  // 3D Holographic Title Intro Overlay State
+  const [showIntro, setShowIntro] = useState<boolean>(true);
 
   // App Navigation & Mode
   const [appMode, setAppMode] = useState<'enterprise' | 'consumer' | 'landing'>('enterprise');
@@ -264,16 +268,28 @@ export function App() {
     }));
   };
 
+  const handleIntroComplete = (action?: 'enterprise' | 'verify-now') => {
+    setShowIntro(false);
+    if (action === 'verify-now') {
+      setAppMode('enterprise');
+      setCurrentNav('verify');
+    }
+  };
+
   // If in public landing page mode:
   if (appMode === 'landing') {
     return (
       <div className="landing-layout-wrapper">
+        {showIntro && <TitleIntroAnimation onComplete={handleIntroComplete} />}
         <header className="landing-top-nav">
           <div className="landing-logo">
             <span className="logo-bold">AD-EVIDENCE</span>
             <span className="logo-tag">See the Claim. See the Evidence.</span>
           </div>
           <div className="landing-nav-actions">
+            <button className="btn btn-secondary btn-sm" onClick={() => setShowIntro(true)}>
+              ✨ 3D Intro
+            </button>
             <button className="btn btn-secondary btn-sm" onClick={() => setAppMode('consumer')}>
               Consumer Check
             </button>
@@ -292,6 +308,7 @@ export function App() {
           <div className="footer-container">
             <span>© 2026 AD-EVIDENCE • The Evidence Layer for Modern Advertising</span>
             <div className="footer-links">
+              <span onClick={() => setShowIntro(true)}>3D Title Intro</span>
               <span onClick={() => setAppMode('enterprise')}>Brand Console</span>
               <span onClick={() => setAppMode('consumer')}>Consumer Check</span>
               <span onClick={() => { setAppMode('enterprise'); setCurrentNav('help'); }}>Methodology</span>
@@ -306,12 +323,16 @@ export function App() {
   if (appMode === 'consumer') {
     return (
       <div className="consumer-layout-wrapper">
+        {showIntro && <TitleIntroAnimation onComplete={handleIntroComplete} />}
         <header className="consumer-top-header">
           <div className="consumer-logo" onClick={() => setAppMode('landing')}>
             <span className="logo-bold">AD-EVIDENCE</span>
             <span className="consumer-pill">CONSUMER</span>
           </div>
           <div className="consumer-top-actions">
+            <button className="btn btn-secondary btn-sm" onClick={() => setShowIntro(true)}>
+              ✨ 3D Intro
+            </button>
             <button className="btn btn-secondary btn-sm" onClick={() => setAppMode('landing')}>
               Public Overview
             </button>
@@ -343,6 +364,9 @@ export function App() {
   // Standard Enterprise Workspace Mode (Default)
   return (
     <div className="enterprise-layout">
+      {/* 3D Holographic Title Intro Animation Overlay */}
+      {showIntro && <TitleIntroAnimation onComplete={handleIntroComplete} />}
+
       {/* Persistent Left Sidebar */}
       <Sidebar 
         currentNav={currentNav}
@@ -362,6 +386,7 @@ export function App() {
           onSelectClaim={handleSelectClaim}
           onOpenHelp={() => setCurrentNav('help')}
           workspaceName={activeProduct?.productName && activeProduct.productName !== 'No Advertisement Verified' ? `${activeProduct.brandName} Verification Workspace` : 'Global Brand Assurance'}
+          onReplayIntro={() => setShowIntro(true)}
         />
 
         {/* Dynamic Route Content */}
